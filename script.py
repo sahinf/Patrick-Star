@@ -1,8 +1,7 @@
 from os import fsdecode, read
 import psycopg2
-# import csv
+from psycopg2 import sql
 import pandas as pd
-# from sqlalchemy import create_engine
 
 # 315_psql='psql -h csce-315-db.engr.tamu.edu -U csce315_913_3_user -d csce315_913_3_db'
 _host = "csce-315-db.engr.tamu.edu"
@@ -15,10 +14,6 @@ conn = psycopg2.connect(
     user=_user,
     password=_pass
 )
-
-
-# engine = create_engine(r'postgresql://some:user@host/db')
-
 
 def cleanup(csv_file, dir='data/'):
     data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
@@ -34,23 +29,45 @@ def cleanupAll():
     cleanup('principals')
     cleanup('titles')
 
-def createCrew(csv):
+def createCrew(tablename=0, csvfile=0):
     cur = conn.cursor()
-    # print(csv.to_sql(name=))
-    # cur.execute('''
-    #     CREATE TABLE IF NOT EXISTS titles(
-    #         titleId TEXT,
-    #         directors TEXT,
-    #         writers TEXT
-    #     );
-    #     \copy titles from \'crew.csv
-    # ''')
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS crew(
+            titleId TEXT PRIMARY KEY,
+            directors TEXT,
+            writers TEXT ); ''')
+    cur.execute('''\copy titles from 'clean_data\crew.csv' CSV HEADER''')
+
+def createCustomerRatings():
+    cur = conn.cursor()
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS ratings(
+            customerId TEXT PRIMARY KEY,
+            rating FLOAT,
+            date TEXT,
+            titleId TEXT );''')
+    cur.execute('''\copy titles from 'clean_data\customer_ratings.csv' CSV HEADER''')
+
+def createNames():
+    cur = conn.cursor()
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS names(
+            nconst TEXT PRIMARY KEY,
+            primaryName TEXT,
+            birthyear FLOAT,
+            deathYear FLOAT,
+            primaryProfession TEXT );''')
+    cur.execute('''\copy titles from 'clean_data\customer_ratings.csv' CSV HEADER''')
+
+
 
 # Remove the first garbage columns from csv and then use sep=','
 # cleanupAll()
 
+# Add crew table to database
+createCrew('crew', 'crew.csv')
 
-cur = conn.cursor()
+# cur = conn.cursor()
 # cur.execute("SELECT * FROM crew LIMIT 10")
 # query_results = cur.fetchall()
 # print(query_results)
