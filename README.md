@@ -1,5 +1,6 @@
 # Patrick-Star
 CSCE 315 Project 2 database management. 
+![Patrick Star](images/patrick-star.png)
 
 connect.py connects to the database
 
