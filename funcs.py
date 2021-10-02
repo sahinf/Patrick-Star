@@ -18,7 +18,7 @@ def cleanupAll():
     cleanup('titles')
 
 # Add "crew" table to database
-def createCrew(tablename=0, csvfile=0):
+def createCrew():
     cur = conn.cursor()
     cur.execute('''
         CREATE TABLE IF NOT EXISTS crew(
@@ -78,3 +78,17 @@ def createTitles():
             averageRating FLOAT,
             numVotes FLOAT );''')
     cur.execute('''\copy names from 'clean_data\\titles.csv' CSV HEADER''')
+
+def deleteTable(tablename=0):
+    cur = conn.cursor()
+    cur.execute(
+        sql.SQL("DROP TABLE {};")
+        .format(sql.Identifier(tablename))
+    )
+
+def deleteAllTables():
+    deleteTable("crew")
+    deleteTable("ratings")
+    deleteTable("names")
+    deleteTable("principals")
+    deleteTable("titles")
