@@ -3,7 +3,7 @@ from funcs import *
 # Remove the first garbage columns from csv and then use sep=','
 # cleanupAll()
 
-# Add tables to database
+# Add tables to database (checks if already exists)
 createCrew()
 createCustomerRatings()
 createNames()
