@@ -1,4 +1,4 @@
-# from connect import *
+from connect import *
 import pandas as pd
 
 ######################################## 
@@ -10,10 +10,8 @@ def cleanup(csv_file, dir='data/'):
     # remove duplicate entries and 'Year' entry from 'title'
     if (csv_file == 'titles'):
         data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
-        print(data)
         del data['Unnamed: 0']
         del data['Year']
-        print(data)
         data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
     else: 
         data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
