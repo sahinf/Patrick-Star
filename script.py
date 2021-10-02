@@ -87,15 +87,20 @@ def createTitles():
     cur.execute('''\copy names from 'clean_data\\titles.csv' CSV HEADER''')
 
 
-
-
 # Remove the first garbage columns from csv and then use sep=','
 # cleanupAll()
 
-# Add crew table to database
-createCrew('crew', 'crew.csv')
+# Add tables to database
+createCrew()
+createCustomerRatings()
+createNames()
+createPrincipals()
+createTitles()
 
-# cur = conn.cursor()
+
+cur = conn.cursor()
 # cur.execute("SELECT * FROM crew LIMIT 10")
 # query_results = cur.fetchall()
 # print(query_results)
+
+cur.close()
