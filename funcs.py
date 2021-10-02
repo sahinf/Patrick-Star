@@ -1,13 +1,24 @@
-from connect import *
+# from connect import *
 import pandas as pd
+
+######################################## 
+#          SANITIZE CSV 
+########################################
 
 # Removes first instance of column with empty name to make it look cleaner
 def cleanup(csv_file, dir='data/'):
-    data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
-    del data['Unnamed: 0']
-    # print(f"Cleaned up {csv_file}.csv:")
-    # print(data)
-    data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
+    # remove duplicate entries and 'Year' entry from 'title'
+    if (csv_file == 'titles'):
+        data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
+        print(data)
+        del data['Unnamed: 0']
+        del data['Year']
+        print(data)
+        data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
+    else: 
+        data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
+        del data['Unnamed: 0']
+        data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
 
 # To sanitize the 5 provided csv files. they suck.
 def cleanupAll():
@@ -16,6 +27,11 @@ def cleanupAll():
     cleanup('names')
     cleanup('principals')
     cleanup('titles')
+
+
+######################################## 
+#          CREATE TABLES 
+########################################
 
 # Add "crew" table to database
 def createCrew():
@@ -79,6 +95,16 @@ def createTitles():
             numVotes FLOAT );''')
     cur.execute('''\copy names from 'clean_data\\titles.csv' CSV HEADER''')
 
+def createAll():
+    createCrew()
+    createCustomerRatings()
+    createNames()
+    createPrincipals()
+    createTitles()
+
+######################################## 
+#          DELETE TABLES 
+########################################
 # Delete provided table from database
 def deleteTable(tablename=0):
     cur = conn.cursor()
