@@ -79,6 +79,7 @@ def createTitles():
             numVotes FLOAT );''')
     cur.execute('''\copy names from 'clean_data\\titles.csv' CSV HEADER''')
 
+# Delete provided table from database
 def deleteTable(tablename=0):
     cur = conn.cursor()
     cur.execute(
@@ -86,6 +87,7 @@ def deleteTable(tablename=0):
         .format(sql.Identifier(tablename))
     )
 
+# Clear database of all tables
 def deleteAllTables():
     deleteTable("crew")
     deleteTable("ratings")
