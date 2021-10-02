@@ -1,7 +1,7 @@
 from connect import *
 import pandas as pd
 
-# 
+# Removes first instance of column with empty name to make it look cleaner
 def cleanup(csv_file, dir='data/'):
     data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
     del data['Unnamed: 0']
@@ -9,6 +9,7 @@ def cleanup(csv_file, dir='data/'):
     # print(data)
     data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
 
+# To sanitize the 5 provided csv files. they suck.
 def cleanupAll():
     cleanup('crew')
     cleanup('customer_ratings')
@@ -16,6 +17,7 @@ def cleanupAll():
     cleanup('principals')
     cleanup('titles')
 
+# Add "crew" table to database
 def createCrew(tablename=0, csvfile=0):
     cur = conn.cursor()
     cur.execute('''
@@ -25,6 +27,7 @@ def createCrew(tablename=0, csvfile=0):
             writers TEXT ); ''')
     cur.execute('''\copy crew from 'clean_data\\crew.csv' CSV HEADER''')
 
+# Add "ratings" table to database
 def createCustomerRatings():
     cur = conn.cursor()
     cur.execute('''
@@ -35,6 +38,7 @@ def createCustomerRatings():
             titleId TEXT );''')
     cur.execute('''\copy ratings from 'clean_data\\customer_ratings.csv' CSV HEADER''')
 
+# Add "names" table to database
 def createNames():
     cur = conn.cursor()
     cur.execute('''
@@ -46,6 +50,7 @@ def createNames():
             primaryProfession TEXT );''')
     cur.execute('''\copy names from 'clean_data\\names.csv' CSV HEADER''')
 
+# Add "principals" table to database
 def createPrincipals():
     cur = conn.cursor()
     cur.execute('''
@@ -57,6 +62,7 @@ def createPrincipals():
             characters TEXT );''')
     cur.execute('''\copy names from 'clean_data\\principals.csv' CSV HEADER''')
 
+# Add "titles" table to database
 def createTitles():
     cur = conn.cursor()
     cur.execute('''
