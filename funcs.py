@@ -1,5 +1,7 @@
 from connect import *
+import pandas as pd
 
+# 
 def cleanup(csv_file, dir='data/'):
     data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
     del data['Unnamed: 0']
