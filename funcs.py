@@ -69,8 +69,8 @@ def createPrincipals():
     cur = conn.cursor()
     cur.execute('''
         CREATE TABLE IF NOT EXISTS principals(
-            titleId TEXT PRIMARY KEY,
-            nconst TEXT,
+            titleId TEXT,
+            nconst TEXT PRIMARY KEY,
             category TEXT,
             job TEXT,
             characters TEXT );''')
