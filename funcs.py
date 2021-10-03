@@ -39,7 +39,7 @@ def createCrew():
             titleId TEXT PRIMARY KEY,
             directors TEXT,
             writers TEXT ); ''')
-    cur.execute('''\copy crew from 'clean_data\\crew.csv' CSV HEADER''')
+    cur.execute('''\copy crew from 'clean_data\crew.csv' CSV HEADER''')
 
 # Add "ratings" table to database
 def createCustomerRatings():
@@ -50,7 +50,7 @@ def createCustomerRatings():
             rating FLOAT,
             date TEXT,
             titleId TEXT );''')
-    cur.execute('''\copy ratings from 'clean_data\\customer_ratings.csv' CSV HEADER''')
+    cur.execute('''\copy ratings from 'clean_data\customer_ratings.csv' CSV HEADER''')
 
 # Add "names" table to database
 def createNames():
@@ -62,7 +62,7 @@ def createNames():
             birthyear FLOAT,
             deathYear FLOAT,
             primaryProfession TEXT );''')
-    cur.execute('''\copy names from 'clean_data\\names.csv' CSV HEADER''')
+    cur.execute('''\copy names from 'clean_data\names.csv' CSV HEADER''')
 
 # Add "principals" table to database
 def createPrincipals():
@@ -74,7 +74,7 @@ def createPrincipals():
             category TEXT,
             job TEXT,
             characters TEXT );''')
-    cur.execute('''\copy names from 'clean_data\\principals.csv' CSV HEADER''')
+    cur.execute('''\copy names from 'clean_data\principals.csv' CSV HEADER''')
 
 # Add "titles" table to database
 def createTitles():
@@ -91,7 +91,7 @@ def createTitles():
             year FLOAT,
             averageRating FLOAT,
             numVotes FLOAT );''')
-    cur.execute('''\copy names from 'clean_data\\titles.csv' CSV HEADER''')
+    cur.execute('''\copy names from 'clean_data\titles.csv' CSV HEADER''')
 
 def createAll():
     createCrew()
