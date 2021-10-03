@@ -3,6 +3,10 @@ from funcs import *
 # Remove the first garbage columns from csv and then use sep=','
 cleanupAll()
 
+
+# UNCOMMENT THIS TO CONNECT TO DATABASE:
+# conn = hackIntoMainframe()
+
 # Add tables to database (checks if already exists)
 # createAll()
 
