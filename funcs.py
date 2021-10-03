@@ -1,9 +1,13 @@
+from os import curdir
 from connect import *
 import pandas as pd
 
 ######################################## 
 #          SANITIZE CSV 
 ########################################
+
+# Uncomment to connect to database
+conn = hackIntoMainframe()
 
 # Removes first instance of column with empty name to make it look cleaner
 def cleanup(csv_file, dir='data/'):
@@ -14,13 +18,13 @@ def cleanup(csv_file, dir='data/'):
         del data['Year']
         data.drop_duplicates(keep=False, inplace=True)
         # data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
-        data.to_csv('clean_data/'+csv_file+'.csv', index=False)
+        data.to_csv('clean_data/'+csv_file+'.csv', index=False, sep='t')
     else: 
         data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
         del data['Unnamed: 0']
         data.drop_duplicates(keep=False, inplace=True)
         # data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
-        data.to_csv('clean_data/'+csv_file+'.csv', index=False)
+        data.to_csv('clean_data/'+csv_file+'.csv', index=False, sep='\t')
 
 # To sanitize the 5 provided csv files. they suck.
 def cleanupAll():
@@ -43,7 +47,7 @@ def createCrew():
             titleId TEXT PRIMARY KEY,
             directors TEXT,
             writers TEXT ); ''')
-    cur.execute('''\copy crew from 'clean_data\crew.csv' CSV HEADER''')
+    conn.commit()
 
 # Add "ratings" table to database
 def createCustomerRatings():
@@ -51,10 +55,10 @@ def createCustomerRatings():
     cur.execute('''
         CREATE TABLE IF NOT EXISTS ratings(
             customerId TEXT PRIMARY KEY,
-            rating FLOAT,
+            rating TEXT,
             date TEXT,
             titleId TEXT );''')
-    cur.execute('''\copy ratings from 'clean_data\customer_ratings.csv' CSV HEADER''')
+    conn.commit()
 
 # Add "names" table to database
 def createNames():
@@ -63,10 +67,10 @@ def createNames():
         CREATE TABLE IF NOT EXISTS names(
             nconst TEXT PRIMARY KEY,
             primaryName TEXT,
-            birthyear FLOAT,
-            deathYear FLOAT,
+            birthyear TEXT,
+            deathYear TEXT,
             primaryProfession TEXT );''')
-    cur.execute('''\copy names from 'clean_data\names.csv' CSV HEADER''')
+    conn.commit()
 
 # Add "principals" table to database
 def createPrincipals():
@@ -78,7 +82,7 @@ def createPrincipals():
             category TEXT,
             job TEXT,
             characters TEXT );''')
-    cur.execute('''\copy names from 'clean_data\principals.csv' CSV HEADER''')
+    conn.commit()
 
 # Add "titles" table to database
 def createTitles():
@@ -88,14 +92,14 @@ def createTitles():
             titleId TEXT PRIMARY KEY,
             titleType TEXT,
             originalTitle TEXT,
-            startYear FLOAT,
-            endYear FLOAT,
-            runtimeMinutes FLOAT,
+            startYear TEXT,
+            endYear TEXT,
+            runtimeMinutes TEXT,
             genres TEXT,
-            year FLOAT,
-            averageRating FLOAT,
-            numVotes FLOAT );''')
-    cur.execute('''\copy names from 'clean_data\titles.csv' CSV HEADER''')
+            year TEXT,
+            averageRating TEXT,
+            numVotes TEXT );''')
+    conn.commit()
 
 def createAll():
     createCrew()
@@ -105,13 +109,54 @@ def createAll():
     createTitles()
 
 ######################################## 
+#          COPY TO TABLES 
+########################################
+
+def copyCrew():
+    cur = conn.cursor()
+    file = open('clean_data/crew.csv')
+    cur.copy_from(file, 'crew', sep="\t")
+    conn.commit()
+
+def copyRatings():
+    cur = conn.cursor()
+    file = open('clean_data/customer_ratings.csv')
+    cur.copy_from(file, 'ratings', sep="\t")
+    conn.commit()
+
+def copyNames():
+    cur = conn.cursor()
+    file = open('clean_data/names.csv')
+    cur.copy_from(file, 'names', sep="\t")
+    conn.commit()
+
+def copyPrincipals():
+    cur = conn.cursor()
+    file = open('clean_data/principals.csv')
+    cur.copy_from(file, 'principals', sep="\t")
+    conn.commit()
+
+def copyTitles():
+    cur = conn.cursor()
+    file = open('clean_data/titles.csv')
+    cur.copy_from(file, 'titles', sep="\t")
+    conn.commit()
+
+def copyAll():
+    copyCrew()
+    copyRatings()
+    copyNames()
+    copyPrincipals()
+    copyTitles()
+
+######################################## 
 #          DELETE TABLES 
 ########################################
 # Delete provided table from database
 def deleteTable(tablename=0):
     cur = conn.cursor()
     cur.execute(
-        sql.SQL("DROP TABLE {};")
+        sql.SQL("DROP TABLE IF EXISTS {};")
         .format(sql.Identifier(tablename))
     )
 
@@ -122,3 +167,6 @@ def deleteAllTables():
     deleteTable("names")
     deleteTable("principals")
     deleteTable("titles")
+
+# conn.commit()
+# conn.close()

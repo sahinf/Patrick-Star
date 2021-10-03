@@ -7,7 +7,7 @@ _db = "csce315_913_3_db"
 _user = "csce315_913_3_user"
 _pass = "sikewrongnumber"
 
-def hackIntoMainframe(conn):
+def hackIntoMainframe():
     conn = psycopg2.connect(
         host=_host,
         database=_db,
