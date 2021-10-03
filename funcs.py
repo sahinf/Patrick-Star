@@ -12,11 +12,15 @@ def cleanup(csv_file, dir='data/'):
         data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
         del data['Unnamed: 0']
         del data['Year']
-        data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
+        data.drop_duplicates(keep=False, inplace=True)
+        # data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
+        data.to_csv('clean_data/'+csv_file+'.csv', index=False)
     else: 
         data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
         del data['Unnamed: 0']
-        data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
+        data.drop_duplicates(keep=False, inplace=True)
+        # data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
+        data.to_csv('clean_data/'+csv_file+'.csv', index=False)
 
 # To sanitize the 5 provided csv files. they suck.
 def cleanupAll():
