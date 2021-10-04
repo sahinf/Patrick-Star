@@ -169,3 +169,14 @@ def deleteAllTables():
 
 # conn.commit()
 # conn.close()
+
+def query(col, table, limit=10):
+    cur = conn.cursor()
+    psql_query = f'SELECT {col} FROM {table} LIMIT {limit}'
+    print('\n')
+    print(psql_query)
+    cur.execute(psql_query)
+    # cur.execute("SELECT %s FROM %s LIMIT 10", (col, table,))
+    query_results = cur.fetchall()
+    print(query_results)
+    cur.close()
