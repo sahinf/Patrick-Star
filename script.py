@@ -8,15 +8,15 @@ from funcs import *
 # conn = hackIntoMainframe()
 
 # Delete tables from database (checks if already exists)
-# deleteAllTables()
+deleteAllTables()
 
 # Add tables to database (checks if already exists)
 createAll()
 
 # Copy data to tables
-# copyAll() # This function takes a while to execute. Bottleneck
+copyAll() # This function takes a while to execute. Bottleneck
 # copyCrew()
-copyRatings() 
+# copyRatings() 
 # copyNames()
 
 # cur = conn.cursor()

@@ -18,7 +18,7 @@ def cleanup(csv_file, dir='data/'):
         del data['Year']
         data.drop_duplicates(keep=False, inplace=True)
         # data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
-        data.to_csv('clean_data/'+csv_file+'.csv', index=False, sep='t')
+        data.to_csv('clean_data/'+csv_file+'.csv', index=False, sep='\t')
     else: 
         data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
         del data['Unnamed: 0']
@@ -54,10 +54,10 @@ def createCustomerRatings():
     cur = conn.cursor()
     cur.execute('''
         CREATE TABLE IF NOT EXISTS ratings(
-            customerId TEXT PRIMARY KEY,
+            customerId TEXT,
             rating TEXT,
             date TEXT,
-            titleId TEXT );''')
+            titleId TEXT);''')
     conn.commit()
 
 # Add "names" table to database
@@ -78,7 +78,7 @@ def createPrincipals():
     cur.execute('''
         CREATE TABLE IF NOT EXISTS principals(
             titleId TEXT,
-            nconst TEXT PRIMARY KEY,
+            nconst TEXT,
             category TEXT,
             job TEXT,
             characters TEXT );''')
