@@ -96,10 +96,8 @@ def createTitles():
             endYear TEXT,
             runtimeMinutes TEXT,
             genres TEXT,
-            year TEXT,
             averageRating TEXT,
-            numVotes TEXT 
-        );''')
+            numVotes TEXT );''')
     conn.commit()
 
 def createAll():
