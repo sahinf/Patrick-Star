@@ -98,7 +98,8 @@ def createTitles():
             genres TEXT,
             year TEXT,
             averageRating TEXT,
-            numVotes TEXT );''')
+            numVotes TEXT 
+        );''')
     conn.commit()
 
 def createAll():
