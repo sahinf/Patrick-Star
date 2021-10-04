@@ -17,6 +17,7 @@ createAll()
 copyAll() # This function takes a while to execute. Bottleneck
 # copyTitles()
 
+# TEST QUERIES (20 of them)
 # cur = conn.cursor()
 # print("Testing whether data was added to tables")
 # cur.execute("SELECT * FROM crew LIMIT 10")
