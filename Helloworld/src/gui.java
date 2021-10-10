@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JList;
+import javax.swing.JCheckBox;
 
 public class gui {
 
@@ -80,7 +81,7 @@ public class gui {
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(108, 250, 327, 377);
+		panel_1.setBounds(508, 251, 327, 377);
 		frame.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -88,7 +89,7 @@ public class gui {
 		list.setBounds(0, 0, 327, 377);
 		panel_1.add(list);
 		
-		JButton btnNewButton_1 = new JButton("Recommendations");
+		JButton btnNewButton_1 = new JButton("Watch History");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultListModel DLM = new DefaultListModel();
@@ -103,8 +104,36 @@ public class gui {
 		
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnNewButton_1.setActionCommand("");
-		btnNewButton_1.setBounds(178, 190, 175, 46);
+		btnNewButton_1.setBounds(579, 193, 175, 46);
 		frame.getContentPane().add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("Content Viewer");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_2.setBounds(508, 22, 117, 29);
+		frame.getContentPane().add(btnNewButton_2);
+		
+		JButton btnNewButton_3 = new JButton("Content Analyst");
+		btnNewButton_3.setBounds(637, 22, 117, 29);
+		frame.getContentPane().add(btnNewButton_3);
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("This Week");
+		chckbxNewCheckBox.setBounds(862, 251, 128, 23);
+		frame.getContentPane().add(chckbxNewCheckBox);
+		
+		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("This Month");
+		chckbxNewCheckBox_1.setBounds(862, 286, 128, 23);
+		frame.getContentPane().add(chckbxNewCheckBox_1);
+		
+		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("This Year");
+		chckbxNewCheckBox_2.setBounds(862, 341, 128, 23);
+		frame.getContentPane().add(chckbxNewCheckBox_2);
+		
+		JCheckBox chckbxNewCheckBox_3 = new JCheckBox("Last 6 Months");
+		chckbxNewCheckBox_3.setBounds(862, 316, 128, 23);
+		frame.getContentPane().add(chckbxNewCheckBox_3);
 		frame.setBounds(100, 100, 1284, 759);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
