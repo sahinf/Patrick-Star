@@ -7,7 +7,7 @@ import pandas as pd
 ########################################
 
 # Uncomment to connect to database
-conn = hackIntoMainframe()
+# conn = hackIntoMainframe()
 
 # Removes first instance of column with empty name to make it look cleaner
 def cleanup(csv_file, dir='data/'):
@@ -16,14 +16,12 @@ def cleanup(csv_file, dir='data/'):
         data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
         del data['Unnamed: 0']
         del data['Year']
-        data.drop_duplicates(keep=False, inplace=True)
-        # data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
-        data.to_csv('clean_data/'+csv_file+'.csv', index=False, sep='\t')
+        data.drop_duplicates(keep="first", inplace=True)
+        data.to_csv('clean_data/'+ csv_file+'.csv', index=False, sep='\t')
     else: 
         data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
         del data['Unnamed: 0']
-        data.drop_duplicates(keep=False, inplace=True)
-        # data.to_csv('clean_data/'+csv_file+'.csv', encoding='utf-8', index=False)
+        data.drop_duplicates(keep="first", inplace=True)
         data.to_csv('clean_data/'+csv_file+'.csv', index=False, sep='\t')
 
 # To sanitize the 5 provided csv files. they suck.
@@ -180,3 +178,64 @@ def query(col, table, limit=10):
     query_results = cur.fetchall()
     print(query_results)
     cur.close()
+
+def query21():
+    # 1
+    query('titleId', 'crew')
+
+    # 2
+    query('directors', 'crew')
+
+    # 3
+    query('writers', 'crew')
+
+    # 4
+    query('customerId', 'ratings')
+
+    # 5
+    query('rating', 'ratings')
+
+    # 7
+    query('date', 'ratings')
+
+    # 8
+    query('titleId', 'ratings')
+
+    # 9
+    query('nconst', 'names')
+
+    # 10
+    query('primaryName', 'names')
+
+    # 11
+    query('birthYear', 'names')
+
+    # 12
+    query('deathYear', 'names')
+
+    # 13
+    query('primaryProfession', 'names')
+
+    # 14
+    query('titleId', 'principals')
+
+    # 15
+    query('nconst', 'principals')
+
+    # 16
+    query('category', 'principals')
+
+    # 17
+    query('characters', 'principals')
+
+    # 18
+    query('titleId', 'titles')
+
+    # 19
+    query('titleType', 'titles')
+
+    # 20
+    query('originalTitle', 'titles')
+
+    # 21
+    query('genres', 'titles')
