@@ -15,3 +15,5 @@ def hackIntoMainframe():
         password=_pass
     )
     return conn
+
+conn = hackIntoMainframe()
