@@ -7,7 +7,7 @@ import pandas as pd
 ########################################
 
 # Uncomment to connect to database
-conn = hackIntoMainframe()
+# conn = hackIntoMainframe()
 
 # Removes first instance of column with empty name to make it look cleaner
 def cleanup(csv_file, dir='data/'):
@@ -109,53 +109,29 @@ def createAll():
 ######################################## 
 #          COPY TO TABLES 
 ########################################
-def copyTable(fileName):
+def copyTable(tableName):
     cur = conn.cursor()
 
     # table "ratings" csv is "cusotmer_ratings.csv"
-    if (fileName == "ratings"):
-        file = open('clean_data/customer_ratings.csv')
+    if (tableName == "ratings"):
+        fileName = tableName
+        # file = open('clean_data/customer_ratings.csv')
     else:
-        file = open('clean_data/' + fileName + '.csv')
-    cur.copy_from(file, fileName, sep="\t")
-    conn.commit()
-
-def copyCrew():
-    cur = conn.cursor()
-    file = open('clean_data/crew.csv')
-    cur.copy_from(file, 'crew', sep="\t")
-    conn.commit()
-
-def copyRatings():
-    cur = conn.cursor()
-    file = open('clean_data/customer_ratings.csv')
-    cur.copy_from(file, 'ratings', sep="\t")
-    conn.commit()
-
-def copyNames():
-    cur = conn.cursor()
-    file = open('clean_data/names.csv')
-    cur.copy_from(file, 'names', sep="\t")
-    conn.commit()
-
-def copyPrincipals():
-    cur = conn.cursor()
-    file = open('clean_data/principals.csv')
-    cur.copy_from(file, 'principals', sep="\t")
-    conn.commit()
-
-def copyTitles():
-    cur = conn.cursor()
-    file = open('clean_data/titles.csv')
-    cur.copy_from(file, 'titles', sep="\t")
+        fileName = tableName + ".csv"
+        # file = open('clean_data/' + fileName + '.csv')
+    
+    # HARD command in order to do "CSV HEADER"
+    command = sql.SQL("COPY {} FROM '{}' CSV HEADER;").format(sql.Identifier(fileName), fileName)
+    # cur.copy_from(file, fileName, sep="\t")
+    cur.copy_expert(command)
     conn.commit()
 
 def copyAll():
-    copyCrew()
-    copyRatings()
-    copyNames()
-    copyPrincipals()
-    copyTitles()
+    copyTable('crew')
+    copyTable('ratings')
+    copyTable('names')
+    copyTable('principals')
+    copyTable('titles')
 
 ######################################## 
 #          DELETE TABLES 
