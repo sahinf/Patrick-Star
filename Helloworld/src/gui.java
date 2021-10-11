@@ -10,11 +10,17 @@ import javax.sound.midi.SysexMessage;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.Button;
 import javax.swing.JTabbedPane;
 
@@ -52,8 +58,77 @@ public class gui {
 	/**
 	 * Create the application.
 	 */
+	Connection connection = null;
+	/**
+	 * Create the application.
+	 */
 	public gui() {
+		connection = dbConnector();
 		initialize();
+		
+	}
+	
+	public static final String user = "csce315_913_3_user";
+	  public static final String pswd = "sikewrongnumber";
+//static //Building the connection
+ Connection conn = null;
+	
+	public Connection dbConnector() {
+		try {
+	        Class.forName("org.postgresql.Driver");
+	        
+	        conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce315_913_3_db",
+	           user, pswd);
+	        JOptionPane.showMessageDialog(null,"Opened database successfully");
+	        return conn;
+	     } catch (Exception e) {
+	        e.printStackTrace();
+	        System.err.println(e.getClass().getName()+": "+e.getMessage());
+	        return null;
+	     }//end try catch
+		
+	}
+	
+	public String getTopContent(String startDate,String endDate, String user) {
+		 String cus_lname = "<html>";
+		 String customerid = "";
+		  //startDate  = "2005-09-06";
+		  //endDate  = "2005-09-15";
+		 if (user.equals("")) {
+			 customerid="";
+		 }
+		 else {
+			 customerid = " and ratings.customerid = '"+user+"'";
+		 }
+	     try{
+	     //create a statement object
+	       Statement stmt = connection.createStatement();
+	       //create an SQL statement
+	       String sqlStatement = "select ratings.titleid,titles.originaltitle,count(ratings.titleid) as total"
+	       		+ " from ratings"
+	       		+ " left join titles on ratings.titleid = titles.titleid"
+	       		+ " where ratings.date > '"+startDate +"' and ratings.date <= '"+endDate+"'"+customerid
+	       		+ " group by ratings.titleid,titles.originaltitle"
+	       		+ " order by total desc"
+	       		+ " limit 10;"; // change
+	       //send statement to DBMS
+	       ResultSet result = stmt.executeQuery(sqlStatement);
+
+	       //OUTPUT
+	       //JOptionPane.showMessageDialog(null,"something bout crew.");
+	       //System.out.println("______________________________________");
+	       while (result.next()) {
+	         //System.out.println(result.getString("cus_lname"));
+	         cus_lname += result.getString("originaltitle")+"<br>"; // change
+	         //cus_lname += result.getString("total")+"<br>";
+	       }
+	       cus_lname += "</html>";
+	       //JOptionPane.showMessageDialog(null,cus_lname);
+	       return cus_lname;
+	   } catch (Exception e){
+	     //JOptionPane.showMessageDialog(null,e);
+	     return "error in accessing data";
+	   }
 	}
 
 	/**
@@ -76,7 +151,7 @@ public class gui {
 		panel.setBounds(1215, 10, 46, 51);
 		frame.getContentPane().add(panel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Username");
+		JLabel lblNewLabel_1 = new JLabel("User Id");
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setBounds(1121, 28, 51, 13);
 		frame.getContentPane().add(lblNewLabel_1);
@@ -133,6 +208,23 @@ public class gui {
 				textField_3_string = textField_3.getText();
 				System.out.println(textField_3_string);
 				
+				if (textField_2_string.equals("")) {
+					textField_2_string = "1980-01-01";
+				}
+				if (textField_3_string.equals("")) {
+					textField_3_string = "2022-01-01";
+				}
+				
+				String UserList = getTopContent(textField_2_string,textField_3_string,textField_1_string);
+				DefaultListModel DLM = new DefaultListModel();
+				DLM.addElement(UserList);
+				//DLM2.addElement(textField_5_string);
+				//DLM2.addElement(textField_6_string);
+				
+				list.setModel(DLM);
+				
+				
+				
 			}
 		});
 		
@@ -141,12 +233,18 @@ public class gui {
 		panel_1.add(btnNewButton_1);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DefaultListModel DLM = new DefaultListModel();
-				DLM.addElement("Minions");
-				DLM.addElement("Better Call Saul");
-				DLM.addElement("Arrow");
-				DLM.addElement("Italian Job");
-				list.setModel(DLM);
+//				DefaultListModel DLM = new DefaultListModel();
+//				DLM.addElement("Minions");
+//				DLM.addElement("Better Call Saul");
+//				DLM.addElement("Arrow");
+//				DLM.addElement("Italian Job");
+//				list.setModel(DLM);
+//				System.out.println(textField_3_string);
+				textField_1_string = textField_1.getText();
+				System.out.println(textField_1_string);
+				textField_2_string = textField_2.getText();
+				System.out.println(textField_2_string);
+				textField_3_string = textField_3.getText();
 				System.out.println(textField_3_string);
 			}
 		});
@@ -184,6 +282,33 @@ public class gui {
 		JButton btnNewButton_2_1 = new JButton("Submit");
 		btnNewButton_2_1.setBounds(203, 319, 117, 29);
 		panel_1_1.add(btnNewButton_2_1);
+		btnNewButton_2_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+//				DefaultListModel DLM = new DefaultListModel();
+//				DLM.addElement("Minions");
+//				DLM.addElement("Better Call Saul");
+//				DLM.addElement("Arrow");
+//				DLM.addElement("Italian Job");
+//				list.setModel(DLM);
+//				System.out.println(textField_3_string);
+				textField_5_string = textField_5.getText();
+				if (textField_5_string.equals("")) {
+					textField_5_string = "1980-01-01";
+				}
+				textField_6_string = textField_6.getText();
+				if (textField_6_string.equals("")) {
+					textField_6_string = "2022-01-01";
+				}
+				
+				String AllUsersList = getTopContent(textField_5_string,textField_6_string,"");
+				DefaultListModel DLM2 = new DefaultListModel();
+				DLM2.addElement(AllUsersList);
+				//DLM2.addElement(textField_5_string);
+				//DLM2.addElement(textField_6_string);
+				
+				list_1.setModel(DLM2);
+			}
+		});
 		
 		JButton btnNewButton_1_1 = new JButton("Top 10 Movies From All Users");
 		btnNewButton_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
