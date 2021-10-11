@@ -111,19 +111,26 @@ def createAll():
 ########################################
 def copyTable(tableName):
     cur = conn.cursor()
-
+    dir = 'clean_data/'
     # table "ratings" csv is "cusotmer_ratings.csv"
     if (tableName == "ratings"):
-        fileName = tableName
+        fileName = dir + 'customer_ratings.csv'
         # file = open('clean_data/customer_ratings.csv')
     else:
-        fileName = tableName + ".csv"
+        fileName = dir + tableName + ".csv"
         # file = open('clean_data/' + fileName + '.csv')
     
     # HARD command in order to do "CSV HEADER"
-    command = sql.SQL("COPY {} FROM '{}' CSV HEADER;").format(sql.Identifier(fileName), fileName)
-    # cur.copy_from(file, fileName, sep="\t")
-    cur.copy_expert(command)
+    # command = sql.SQL("\copy {} FROM '{}' CSV HEADER;").format(sql.Identifier(tableName), sql.Identifier(fileName))
+    
+    # command = f'COPY {tableName} FROM \'{fileName}\' CSV HEADER;'
+    
+    command = f'COPY {tableName} FROM STDIN CSV HEADER;'
+    # command = sql.SQL(command)
+    
+    # cur.execute(command)
+    cur.copy_expert(command, open(fileName))
+    # cur.copy_from(open(fileName), tableName, sep='\t')
     conn.commit()
 
 def copyAll():
