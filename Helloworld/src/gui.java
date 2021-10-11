@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 import java.awt.Button;
 import javax.swing.JTabbedPane;
@@ -130,6 +131,40 @@ public class gui {
 	     return "error in accessing data";
 	   }
 	}
+	
+	public String getWatchHistory(String startDate, String endDate,String user) {
+		String cus_lname = "<html>";
+		 
+	     try{
+	     //create a statement object
+	       Statement stmt = connection.createStatement();
+	       //create an SQL statement
+	       String sqlStatement = "select ratings.titleid,titles.originaltitle, ratings.date"
+	       		+ " from ratings"
+	       		+ " left join titles on ratings.titleid = titles.titleid"
+	       		+ " where ratings.date > '"+startDate +"' and ratings.date <= '"+endDate+"' and ratings.customerid = '"+user+"'"
+	       		+ " order by ratings.date desc;"; // change
+	       //send statement to DBMS
+	       ResultSet result = stmt.executeQuery(sqlStatement);
+
+	       //OUTPUT
+	       //JOptionPane.showMessageDialog(null,"something bout crew.");
+	       //System.out.println("______________________________________");
+	       while (result.next()) {
+	         //System.out.println(result.getString("cus_lname"));
+	         cus_lname += result.getString("originaltitle")+"<br>"; // change
+	         //cus_lname += result.getString("total")+"<br>";
+	       }
+	       cus_lname += "</html>";
+	       //JOptionPane.showMessageDialog(null,cus_lname);
+	       return cus_lname;
+	   } catch (Exception e){
+	     //JOptionPane.showMessageDialog(null,e);
+	     return "error in accessing data";
+	   }
+		
+		
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -165,9 +200,12 @@ public class gui {
 		tabbedPane.addTab("Viewer", null, panel_1, null);
 		panel_1.setLayout(null);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(353, 124, 266, 329);
+		panel_1.add(scrollPane);
+		
 		JList list = new JList();
-		list.setBounds(353, 124, 265, 329);
-		panel_1.add(list);
+		scrollPane.setViewportView(list);
 		
 		JLabel lblNewLabel_2 = new JLabel("User ID");
 		lblNewLabel_2.setBounds(230, 148, 61, 16);
@@ -215,7 +253,7 @@ public class gui {
 					textField_3_string = "2022-01-01";
 				}
 				
-				String UserList = getTopContent(textField_2_string,textField_3_string,textField_1_string);
+				String UserList = getWatchHistory(textField_2_string,textField_3_string,textField_1_string);
 				DefaultListModel DLM = new DefaultListModel();
 				DLM.addElement(UserList);
 				//DLM2.addElement(textField_5_string);
