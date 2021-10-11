@@ -1,8 +1,8 @@
 from funcs import *
 
 # Remove the first garbage columns from csv and then use sep=','
-cleanupAll()
-
+# cleanupAll()
+cleanup('titles')
 
 # UNCOMMENT THIS TO CONNECT TO DATABASE:
 # conn = hackIntoMainframe()
@@ -15,9 +15,6 @@ cleanupAll()
 
 # Copy data to tables
 # copyAll() # This function takes a while to execute. Bottleneck
-
-
-
 
 
 # TEST QUERIES (20 of them)

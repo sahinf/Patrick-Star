@@ -7,7 +7,7 @@ import pandas as pd
 ########################################
 
 # Uncomment to connect to database
-# conn = hackIntoMainframe()
+conn = hackIntoMainframe()
 
 # Removes first instance of column with empty name to make it look cleaner
 def cleanup(csv_file, dir='data/'):
@@ -16,6 +16,7 @@ def cleanup(csv_file, dir='data/'):
         data = pd.read_csv(dir + csv_file + '.csv', sep='\t')
         del data['Unnamed: 0']
         del data['Year']
+        print(data)
         data.drop_duplicates(keep="first", inplace=True)
         data.to_csv('clean_data/'+ csv_file+'.csv', index=False, sep='\t')
     else: 
@@ -108,6 +109,16 @@ def createAll():
 ######################################## 
 #          COPY TO TABLES 
 ########################################
+def copyTable(fileName):
+    cur = conn.cursor()
+
+    # table "ratings" csv is "cusotmer_ratings.csv"
+    if (fileName == "ratings"):
+        file = open('clean_data/customer_ratings.csv')
+    else:
+        file = open('clean_data/' + fileName + '.csv')
+    cur.copy_from(file, fileName, sep="\t")
+    conn.commit()
 
 def copyCrew():
     cur = conn.cursor()
