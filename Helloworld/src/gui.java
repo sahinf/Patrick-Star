@@ -1,6 +1,7 @@
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import java.lang.Throwable;
 import java.awt.Color;
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
@@ -11,6 +12,12 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Array;
+import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Vector;
+import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -57,7 +64,6 @@ public class gui {
 			}
 		});
 		
-		System.out.println("test");
 	}
 
 	/**
@@ -170,45 +176,112 @@ public class gui {
 		
 	}
 	
-	public String getViewersChoice(String user) {
-		String cus_lname = "<html>";
-		ResultSet result;
-		 
-	     try{
-	     //create a statement object
-	       Statement stmt = connection.createStatement();
-	       //Collecting 4+ ratings from the user
-	       String sqlStatement = "select ratings4plus.titleid,titles.originaltitle, titles.genres, ratings4plus.date"
-	       		+ " from ratings4plus"
-	       		+ " left join titles on ratings4plus.titleid = titles.titleid"
-	       		+ " where ratings4plus.customerid = '"+user+"' "
-	       		+ " group by ratings4plus.titleid,titles.originaltitle,titles.genres,ratings4plus.date"
-	       		+ " order by ratings4plus.rating desc;"; // change
-	       //send statement to DBMS
-	       result = stmt.executeQuery(sqlStatement);
-//	       String[] theGenres = null;
-//	       Array genreArray = result.getArray("genres");
-//	       if (genreArray != null) { 
-//	    	   theGenres = (String[]) genreArray.getArray();
+	
+//	public String getPersonalRec(String userFavGenres) throws Exception {
+//		String cus_lname = "<html>";
+//		ResultSet result;
+//		 
+//	     try{
+//	     //create a statement object
+//	       Statement stmt = connection.createStatement();
+//	       //Collecting 4+ ratings from the user
+//	       String sqlStatement = "select titles.originaltitle, titles.genres, titles.averagerating, titles.numvotes"
+//	       		+ " from titles"
+//	       		+ " where titles.genres != '' and titles.originaltitle != 'originalTitle' "
+//	       		+ " order by titles.averagerating desc;"; // change
+//	       //send statement to DBMS
+//	       result = stmt.executeQuery(sqlStatement);
+//	       
+//	       // titles.averagerating > '7.0' and titles.numvotes > '500' and 
+//	       //Generating recommended title list, only looking for titles that have a credible rating.
+//	       //Definition of credible rating according to our group: Rating that is 7.0+ AND has more than 50 votes.
+//	       String placeholder = "";
+//	       Integer aCount = 0;
+//	       while (result.next()) {
+//	    	   if ((result.getDouble("averagerating") < 7.0) || (result.getInt("numvotes") < 50)) {
+//	    		   continue;
+//	    	   }
+//	    	   placeholder = result.getString("genres");
+//	    	   if (placeholder.contentEquals(userFavGenres)) {
+//	    		   cus_lname += result.getString("originaltitle") + "<br>";
+//	    		   ++aCount;
+//	    		   if (aCount == 20) {
+//	    			   cus_lname += "</html>";
+//	    			   return cus_lname;
+//	    			  }
+//	    		   continue;
+//	    		   }
+//	       }
+//	       cus_lname += "</html>";
+//	       return cus_lname;
+//	   } catch (Exception e){
+//	     //JOptionPane.showMessageDialog(null,e);
+//	     throw new Exception("Error in accessing data");
+//	   }
+//		
+//		
+//	}
+//	
+//	
+//	
+//	public String curateViewersChoice(String user) throws Exception {
+//		String cus_lname = "<html>";
+//		Map<String,List<String>> userGenres = new HashMap<>();
+//		ResultSet result;
+//		 
+//	     try{
+//	     //create a statement object
+//	       Statement stmt = connection.createStatement();
+//	       //Collecting 4+ ratings from the user
+//	       String sqlStatement = "select ratings4plus.titleid,titles.originaltitle, titles.genres, ratings4plus.rating"
+//	       		+ " from ratings4plus"
+//	       		+ " left join titles on ratings4plus.titleid = titles.titleid"
+//	       		+ " where ratings4plus.customerid = '"+user+"' "
+//	       		+ " group by ratings4plus.titleid,titles.originaltitle,titles.genres, ratings4plus.rating"
+//	       		+ " order by ratings4plus.rating desc;"; // change
+//	       //send statement to DBMS
+//	       result = stmt.executeQuery(sqlStatement);
+//	       
+//	       //Populating hashmap of each title and their genres
+//	       while (result.next()) {
+//	         userGenres.put(result.getString("titleid"), Arrays.asList(result.getString("genres")));
 //	       }
 //	       
-	       
-	       //Storing genres into a hashmap
-	       while (result.next()) {
-	         //System.out.println(result.getString("cus_lname"));
-	         cus_lname += result.getString("genres")+"<br>"; // change
-	         //cus_lname += result.getString("total")+"<br>";
-	       }
-	       cus_lname += "</html>";
-	       //JOptionPane.showMessageDialog(null,cus_lname);
-	       return cus_lname;
-	   } catch (Exception e){
-	     //JOptionPane.showMessageDialog(null,e);
-	     return "error in accessing data";
-	   }
-		
-		
-	}
+//	       //Creating a hashmap which collects the frequency of genres in each category.
+//		   Map<String, Integer> genreCount = new HashMap<>();
+//		   for (Map.Entry<String, List<String> > set : userGenres.entrySet()) {
+//			   List<String> placeholder = set.getValue();
+//			   for (int i = 0; i < placeholder.size(); ++i) {
+//				   if (!genreCount.containsKey(placeholder.get(i))) {
+//					   genreCount.put(placeholder.get(i), 1);
+//				   } else {
+//					   genreCount.merge(placeholder.get(i),1,Integer::sum);
+//				   }
+//			   }
+//		   }
+//		   
+//		   System.out.println(genreCount);
+//		   //Find most occuring genre
+//		   Integer mostOccuring = 0;
+//		   String mostGenre = null;
+//		   for (Map.Entry<String,Integer> set : genreCount.entrySet()) {
+//			   if ((set.getValue() > mostOccuring) && (set.getKey().contains(","))) {
+//				   mostOccuring = set.getValue();
+//				   mostGenre = set.getKey();
+//			   }
+//		   }
+//		   
+//		   System.out.println(mostGenre);
+//		   System.out.println(mostOccuring);
+//		   return mostGenre;
+//	       
+//	   } catch (Exception e){
+//	     //JOptionPane.showMessageDialog(null,e);
+//	     throw new Exception("Error in accessing data");
+//	   }
+//		
+//		
+//	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -289,13 +362,26 @@ public class gui {
 				}
 				
 //				String UserList = getWatchHistory(textField_2_string,textField_3_string,textField_1_string);
-				String UserRec = getViewersChoice(textField_1_string);
 				DefaultListModel DLM = new DefaultListModel();
-				DLM.addElement(UserRec);
-				//DLM2.addElement(textField_5_string);
-				//DLM2.addElement(textField_6_string);
+				try {
+					viewersChoice ViewersChoice = new viewersChoice();
+					String userRecGenres = ViewersChoice.curateViewersChoice(textField_1_string);
+					System.out.println("I'm working");
+					String allTitles = ViewersChoice.getPersonalRec(userRecGenres);
+					DLM.addElement(allTitles);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 				list.setModel(DLM);
+				
+//				DefaultListModel DLM = new DefaultListModel();
+//				DLM.addElement(UserRec);
+//				//DLM2.addElement(textField_5_string);
+//				//DLM2.addElement(textField_6_string);
+//				
+//				list.setModel(DLM);
 				
 				
 				
