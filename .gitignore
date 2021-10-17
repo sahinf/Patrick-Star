@@ -111,18 +111,18 @@ env.bak/
 venv.bak/
 
 # Spyder project settings
-.spyderproject
-.spyproject
+*.spyderproject
+*.spyproject
 
 # Rope project settings
-.ropeproject
+*.ropeproject
 
 # mkdocs documentation
 /site
 
 # mypy
-.mypy_cache/
-.dmypy.json
+*.mypy_cache/
+*.dmypy.json
 dmypy.json
 
 # Pyre type checker
@@ -130,5 +130,11 @@ dmypy.json
 
 
 # MAC Bullshit
-.DS_Store
-.idea
+*.DS_Store
+*.idea
+
+# Java Bullshit
+*.class
+
+# I don't even know Bullshit
+*.iml
