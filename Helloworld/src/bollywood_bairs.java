@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.*;
+import java.lang.Object;
 
 public class bollywood_bairs {
 
@@ -67,7 +68,11 @@ public class bollywood_bairs {
 //        System.out.println(graph.size());
 //    }
 
-    public HashMap<String, Float> queryTop25k(){ return null; } // THIS COULD POTENTIALLY BE A VECTOR IDK YET
+    public HashMap<String, Float> queryTop25k(){
+        // THIS COULD POTENTIALLY BE A VECTOR IDK YET
+        return null;
+    }
+
     public HashMap<String, ArrayList<String>> queryAllPrincipals() {
         // the hardest logic here is to query only if the column is a job :(
         return null;
@@ -75,7 +80,9 @@ public class bollywood_bairs {
 
     public void queryTitleActors() {}
 
-
+    public void doWork(){
+        HashMap<pair<String, String>l, ArrayList<Float>> pair_ratings;
+    }
 
 }
 
