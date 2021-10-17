@@ -57,7 +57,7 @@
 
 with 
 moviesWorkedIn as(
-select titleid,nconst from principals as p where nconst = 'nm0000002'
+select titleid,nconst from principals as p where nconst = 'nm0000003'
 ),
 -- select * from moviesWorkedIn;
 costars as(
@@ -95,8 +95,8 @@ select director from starDirectorsOrdered
 )
  select costarsDirectorsOnly.director,costarsDirectorsOrdered.num
  from costarsDirectorsOnly left join costarsDirectorsOrdered on costarsDirectorsOnly.director = costarsDirectorsOrdered.director
- order by num desc
- limit 1;
+ order by num desc;
+ --limit 1;
 --  select count(*) from cte4;
 
 
