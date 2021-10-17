@@ -10,6 +10,7 @@ import javax.sound.midi.SysexMessage;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,6 +25,7 @@ import javax.swing.JScrollPane;
 
 import java.awt.Button;
 import javax.swing.JTabbedPane;
+import javax.swing.JRadioButton;
 
 public class gui {
 	
@@ -54,6 +56,8 @@ public class gui {
 				}
 			}
 		});
+		
+		System.out.println("test");
 	}
 
 	/**
@@ -165,6 +169,46 @@ public class gui {
 		
 		
 	}
+	
+	public String getViewersChoice(String user) {
+		String cus_lname = "<html>";
+		ResultSet result;
+		 
+	     try{
+	     //create a statement object
+	       Statement stmt = connection.createStatement();
+	       //Collecting 4+ ratings from the user
+	       String sqlStatement = "select ratings4plus.titleid,titles.originaltitle, titles.genres, ratings4plus.date"
+	       		+ " from ratings4plus"
+	       		+ " left join titles on ratings4plus.titleid = titles.titleid"
+	       		+ " where ratings4plus.customerid = '"+user+"' "
+	       		+ " group by ratings4plus.titleid,titles.originaltitle,titles.genres,ratings4plus.date"
+	       		+ " order by ratings4plus.rating desc;"; // change
+	       //send statement to DBMS
+	       result = stmt.executeQuery(sqlStatement);
+//	       String[] theGenres = null;
+//	       Array genreArray = result.getArray("genres");
+//	       if (genreArray != null) { 
+//	    	   theGenres = (String[]) genreArray.getArray();
+//	       }
+//	       
+	       
+	       //Storing genres into a hashmap
+	       while (result.next()) {
+	         //System.out.println(result.getString("cus_lname"));
+	         cus_lname += result.getString("genres")+"<br>"; // change
+	         //cus_lname += result.getString("total")+"<br>";
+	       }
+	       cus_lname += "</html>";
+	       //JOptionPane.showMessageDialog(null,cus_lname);
+	       return cus_lname;
+	   } catch (Exception e){
+	     //JOptionPane.showMessageDialog(null,e);
+	     return "error in accessing data";
+	   }
+		
+		
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -207,35 +251,26 @@ public class gui {
 		JList list = new JList();
 		scrollPane.setViewportView(list);
 		
-		JLabel lblNewLabel_2 = new JLabel("User ID");
-		lblNewLabel_2.setBounds(230, 148, 61, 16);
-		panel_1.add(lblNewLabel_2);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(187, 176, 130, 26);
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
-		
 		JLabel lblNewLabel_3 = new JLabel("Start Date");
-		lblNewLabel_3.setBounds(216, 214, 89, 16);
+		lblNewLabel_3.setBounds(228, 160, 89, 16);
 		panel_1.add(lblNewLabel_3);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(187, 242, 130, 26);
+		textField_2.setBounds(197, 188, 130, 26);
 		panel_1.add(textField_2);
 		textField_2.setColumns(10);
 		
 		JLabel lblNewLabel_4 = new JLabel("End Date");
-		lblNewLabel_4.setBounds(216, 292, 61, 16);
+		lblNewLabel_4.setBounds(228, 226, 61, 16);
 		panel_1.add(lblNewLabel_4);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(187, 320, 130, 26);
+		textField_3.setBounds(197, 254, 130, 26);
 		panel_1.add(textField_3);
 		textField_3.setColumns(10);
 		
 		JButton btnNewButton_2 = new JButton("Submit");
-		btnNewButton_2.setBounds(187, 370, 117, 29);
+		btnNewButton_2.setBounds(200, 290, 117, 29);
 		panel_1.add(btnNewButton_2);
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -253,9 +288,10 @@ public class gui {
 					textField_3_string = "2022-01-01";
 				}
 				
-				String UserList = getWatchHistory(textField_2_string,textField_3_string,textField_1_string);
+//				String UserList = getWatchHistory(textField_2_string,textField_3_string,textField_1_string);
+				String UserRec = getViewersChoice(textField_1_string);
 				DefaultListModel DLM = new DefaultListModel();
-				DLM.addElement(UserList);
+				DLM.addElement(UserRec);
 				//DLM2.addElement(textField_5_string);
 				//DLM2.addElement(textField_6_string);
 				
@@ -278,18 +314,68 @@ public class gui {
 //				DLM.addElement("Italian Job");
 //				list.setModel(DLM);
 //				System.out.println(textField_3_string);
-				textField_1_string = textField_1.getText();
-				System.out.println(textField_1_string);
-				textField_2_string = textField_2.getText();
-				System.out.println(textField_2_string);
-				textField_3_string = textField_3.getText();
-				System.out.println(textField_3_string);
+//				textField_1_string = textField_1.getText();
+//				System.out.println(textField_1_string);
+//				textField_2_string = textField_2.getText();
+//				System.out.println(textField_2_string);
+//				textField_3_string = textField_3.getText();
+//				System.out.println(textField_3_string);
 			}
 		});
 		
 		
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnNewButton_1.setActionCommand("");
+		
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("Last Month");
+		rdbtnNewRadioButton.setBounds(631, 144, 141, 23);
+		panel_1.add(rdbtnNewRadioButton);
+		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textField_2_string = "2005-11-30";
+				textField_3_string = "2005-12-31";
+			}
+		});
+		
+		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Last 3 Months");
+		rdbtnNewRadioButton_1.setBounds(631, 177, 141, 23);
+		panel_1.add(rdbtnNewRadioButton_1);
+		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textField_2_string = "2005-09-30";
+				textField_3_string = "2005-12-31";
+			}
+		});
+		
+		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Last 6 Months");
+		rdbtnNewRadioButton_2.setBounds(631, 210, 141, 23);
+		panel_1.add(rdbtnNewRadioButton_2);
+		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textField_2_string = "2005-06-30";
+				textField_3_string = "2005-12-31";
+			}
+		});
+		
+		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("Last Year");
+		rdbtnNewRadioButton_3.setBounds(631, 243, 141, 23);
+		panel_1.add(rdbtnNewRadioButton_3);
+		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textField_2_string = "2004-12-31";
+				textField_3_string = "2005-12-31";
+			}
+		});
+		
+		JRadioButton rdbtnNewRadioButton_4 = new JRadioButton("All Time");
+		rdbtnNewRadioButton_4.setBounds(631, 278, 141, 23);
+		panel_1.add(rdbtnNewRadioButton_4);
+		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textField_6_string = "2005-11-30";
+				textField_6_string = "2005-12-31";
+			}
+		});
 		
 		JPanel panel_1_1 = new JPanel();
 		panel_1_1.setLayout(null);
@@ -371,6 +457,15 @@ public class gui {
 		textField.setBounds(801, 23, 115, 19);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("User ID");
+		lblNewLabel_2.setBounds(86, 115, 61, 16);
+		frame.getContentPane().add(lblNewLabel_2);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(56, 143, 130, 26);
+		frame.getContentPane().add(textField_1);
+		textField_1.setColumns(10);
 		frame.setBounds(100, 100, 1284, 759);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
