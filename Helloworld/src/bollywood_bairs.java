@@ -65,7 +65,7 @@ public class bollywood_bairs {
 //        System.out.println(graph.size());
 //    }
 
-    public HashMap<String, Float> queryTop25k(){
+    public HashMap<String, Float> queryTop25k() throws Exception {
         //create a statement object
         ResultSet result;
         try {
@@ -75,23 +75,46 @@ public class bollywood_bairs {
                     "LIMIT 10;";
             // send statement to DB
             result = stmt.executeQuery(sqlStatement);
+            HashMap<String, Float> res = new HashMap<>();
+            while(result.next()){
+                String titleId = result.getString("titleId");
+                Float rating = result.getFloat("averageRating");
+                res.put(titleId, rating);
+            }
+            return res;
         }
         catch (Exception e){
             //JOptionPane.showMessageDialog(null,e);
-//            throw new Exception("Error in accessing data in queryTop25k");
+            throw new Exception("Error in accessing data in queryTop25k");
         }
-
-        return null;
     }
 
-    public HashMap<String, ArrayList<String>> queryActors() {
-        // the hardest logic here is to query only if the column is a job :(
-        return null;
+    public HashMap<String, ArrayList<String>> queryActors() throws Exception {
+        //create a statement object
+        ResultSet result;
+        try {
+            Statement stmt = connection.createStatement();
+            String sqlStatement = "select * from principals where category = 'actor' or category = 'actress'";
+            // send statement to DB
+            result = stmt.executeQuery(sqlStatement);
+            HashMap<String, ArrayList<String>> res = new HashMap<>();
+            while(result.next()){
+                String titleId = result.getString("titleId");
+                String category = result.getString("category");
+                res.putIfAbsent(titleId, new ArrayList<String>());
+                res.get(titleId).add(category);
+            }
+            return res;
+        }
+        catch (Exception e){
+            //JOptionPane.showMessageDialog(null,e);
+            throw new Exception("Error in accessing data in queryTop25k");
+        }
     }
 
     public void queryTitleActors() {}
 
-    public void doWork(){
+    public void doWork() throws Exception {
         // Type is <titleID, rating>
         HashMap<String, Float> title_ratings = queryTop25k();
 
@@ -130,6 +153,17 @@ public class bollywood_bairs {
             // Divide total ratings by size to get AVERAGE
             sum = sum / vec_rat.size();
             pair_avg_rat.put(sum, m.getKey()); // actor, actor, rating_average
+        }
+
+
+        // TESTING Print out the top 20 values
+        System.out.println("Printing out the top 20 actor pairs and their ratings");
+        int i = 0;
+        int print_num = 20;
+        Iterator iter = pair_avg_rat.entrySet().iterator();
+        while (iter.hasNext() && i < print_num) {
+            Map.Entry m = (Map.Entry) iter.next();
+            System.out.println("Act 1: " + m.getValue() + " rating: " + m.getKey());
         }
 
     }
