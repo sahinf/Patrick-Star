@@ -107,18 +107,33 @@ public class bollywood_bairs {
 
         Iterator ratingIter = title_ratings.entrySet().iterator();
 
-        while(ratingIter.hasNext()){
-            // This map element is <titleID, rating>
-            Map.Entry mapElement = (Map.Entry) ratingIter.next();
-
-            // .getValue and .getKey
-            ArrayList<String> actors = title_actors.get(mapElement.getKey());
+//        while(ratingIter.hasNext()){
+//            // This map element is <titleID, rating>
+//            Map.Entry mapElement = (Map.Entry) ratingIter.next();
+//
+//            // .getValue and .getKey
+//            ArrayList<String> actors = new ArrayList();
+//            actors = title_actors.get(mapElement.getKey());
+//            int size = actors.size();
+//            for (int i = 0; i < size - 1; i++) {
+//                for (int j = i+1; j < size; j++) {
+//                    Pair<String, String> p = new Pair<>(actors.get(i), actors.get(j));
+//                    if (pair_ratings.get(p) != null) {
+//                        pair_ratings.get(p).add((Double) mapElement.getValue());
+//                    }
+//                }
+//            }
+//        }
+        for(Map.Entry<String, Double> m : title_ratings.entrySet()) {
+        	// .getValue and .getKey
+            ArrayList<String> actors = new ArrayList();
+            actors = title_actors.get(m.getKey());
             int size = actors.size();
             for (int i = 0; i < size - 1; i++) {
                 for (int j = i+1; j < size; j++) {
                     Pair<String, String> p = new Pair<>(actors.get(i), actors.get(j));
                     if (pair_ratings.get(p) != null) {
-                        pair_ratings.get(p).add((Double) mapElement.getValue());
+                        pair_ratings.get(p).add((Double) m.getValue());
                     }
                 }
             }
