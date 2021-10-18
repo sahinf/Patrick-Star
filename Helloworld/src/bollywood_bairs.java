@@ -49,7 +49,7 @@ public class bollywood_bairs {
 //            //send statement to DBMS
 //            ResultSet result = stmt.executeQuery(sqlStatement);
 //
-//            //OUTPUT
+//            // OUTPUT
 //            //JOptionPane.showMessageDialog(null,"something bout crew.");
 //            //System.out.println("______________________________________");
 //            //System.out.println(result.getString("cus_lname"));
@@ -69,7 +69,21 @@ public class bollywood_bairs {
 //    }
 
     public HashMap<String, Float> queryTop25k(){
-        // THIS COULD POTENTIALLY BE A VECTOR IDK YET
+        //create a statement object
+        ResultSet result;
+        try {
+            Statement stmt = connection.createStatement();
+            String sqlStatement = "SELECT titles.titleid, titles.averagerating FROM titles\n" +
+                    "ORDER BY titles.averagerating DESC\n" +
+                    "LIMIT 10;";
+            // send statement to DB
+            result = stmt.executeQuery(sqlStatement);
+        }
+        catch (Exception e){
+            //JOptionPane.showMessageDialog(null,e);
+            throw new Exception("Error in accessing data in queryTop25k");
+        }
+
         return null;
     }
 
@@ -81,7 +95,8 @@ public class bollywood_bairs {
     public void queryTitleActors() {}
 
     public void doWork(){
-        HashMap<pair<String, String>l, ArrayList<Float>> pair_ratings;
+        HashMap<Pair<String, String>, ArrayList<Float>> pair_ratings;
+        for ()
     }
 
 }
