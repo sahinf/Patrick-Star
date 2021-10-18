@@ -81,13 +81,13 @@ public class bollywood_bairs {
         }
         catch (Exception e){
             //JOptionPane.showMessageDialog(null,e);
-            throw new Exception("Error in accessing data in queryTop25k");
+//            throw new Exception("Error in accessing data in queryTop25k");
         }
 
         return null;
     }
 
-    public HashMap<String, ArrayList<String>> queryAllPrincipals() {
+    public HashMap<String, ArrayList<String>> queryActors() {
         // the hardest logic here is to query only if the column is a job :(
         return null;
     }
@@ -95,8 +95,31 @@ public class bollywood_bairs {
     public void queryTitleActors() {}
 
     public void doWork(){
-        HashMap<Pair<String, String>, ArrayList<Float>> pair_ratings;
-        for ()
+        // Type is <titleID, rating>
+        HashMap<String, Float> title_ratings = queryTop25k();
+
+        // Type is <titleID, vector<Actors>>
+        HashMap<String, ArrayList<String>> title_actors = queryActors();
+
+        // Type is < <Actor_1, Actor_2>, vector<rating>>
+        HashMap<Pair<String, String>, ArrayList<Float>> pair_ratings = new HashMap<>();
+
+        Iterator ratingIter = title_ratings.entrySet().iterator();
+
+        while(ratingIter.hasNext()){
+            // This map element is <titleID, rating>
+            Map.Entry mapElement = (Map.Entry) ratingIter.next();
+
+            // .getValue and .getKey
+            ArrayList<String> actors = title_actors.get(mapElement.getKey());
+            int size = actors.size();
+            for (int i = 0; i < size - 1; i++) {
+                for (int j = i+1; j < size; j++) {
+                    Pair<String, String> p = new Pair<>(actors.get(i), actors.get(j));
+                    pair_ratings.get(p).add((Float) mapElement.getValue());
+                }
+            }
+        }
     }
 
 }

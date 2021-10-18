@@ -10,7 +10,7 @@ class Pair<U, V>
     public final V second;      // the second field of a pair
 
     // Constructs a new pair with specified values
-    private Pair(U first, V second)
+    public Pair(U first, V second)
     {
         this.first = first;
         this.second = second;
