@@ -101,12 +101,17 @@ public class bollywood_bairs {
 
         // Type is <titleID, vector<Actors>>
         HashMap<String, ArrayList<String>> title_actors = queryActors();
+        
+        // Test whether title_actors is populated
+        for(Map.Entry<String, ArrayList<String>> m : title_actors.entrySet()) {
+        	// .getValue and .getKey
+            System.out.println(m.getKey() + m.getValue().get(0));
+        }
 
         // Type is <<Actor1, Actor2>, vector<rating>>
         HashMap<Pair<String, String>, ArrayList<Double>> pair_ratings = new HashMap<>();
 
-        Iterator ratingIter = title_ratings.entrySet().iterator();
-
+//        Iterator ratingIter = title_ratings.entrySet().iterator();
 //        while(ratingIter.hasNext()){
 //            // This map element is <titleID, rating>
 //            Map.Entry mapElement = (Map.Entry) ratingIter.next();
@@ -127,15 +132,17 @@ public class bollywood_bairs {
         for(Map.Entry<String, Double> m : title_ratings.entrySet()) {
         	// .getValue and .getKey
             ArrayList<String> actors = new ArrayList();
-            actors = title_actors.get(m.getKey());
-            int size = actors.size();
-            for (int i = 0; i < size - 1; i++) {
-                for (int j = i+1; j < size; j++) {
-                    Pair<String, String> p = new Pair<>(actors.get(i), actors.get(j));
-                    if (pair_ratings.get(p) != null) {
-                        pair_ratings.get(p).add((Double) m.getValue());
-                    }
-                }
+            if (title_actors.get(m.getKey()) != null){
+	            actors = title_actors.get(m.getKey());
+	            int size = actors.size();
+	            for (int i = 0; i < size - 1; i++) {
+	                for (int j = i+1; j < size; j++) {
+	                    Pair<String, String> p = new Pair<>(actors.get(i), actors.get(j));
+	                    if (pair_ratings.get(p) != null) {
+	                        pair_ratings.get(p).add((Double) m.getValue());
+	                    }
+	                }
+	            }
             }
         }
 
