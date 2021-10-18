@@ -29,7 +29,6 @@ public class bollywood_bairs {
 
     public bollywood_bairs(){
         connection = dbConnector();
-//        bulkquery();
     }
 
     public static void main(String[] args) {
@@ -41,35 +40,6 @@ public class bollywood_bairs {
 			e.printStackTrace();
 		}
     }
-
-//    public void bulkquery() {
-//        String cus_lname = "";
-//        try{
-//            //create a statement object
-//            Statement stmt = connection.createStatement();
-//            //create an SQL statement
-//            String sqlStatement = "select titleid, customerid from ratings4plus"; // change
-//            //send statement to DBMS
-//            ResultSet result = stmt.executeQuery(sqlStatement);
-//
-//            // OUTPUT
-//            //JOptionPane.showMessageDialog(null,"something bout crew.");
-//            //System.out.println("______________________________________");
-//            //System.out.println(result.getString("cus_lname"));
-//            while(result.next()) {
-//                String titleid = result.getString("titleid");
-//                String customerid = result.getString("customerid");
-//                addEdge(titleid,customerid,true);
-//            }
-//            //JOptionPane.showMessageDialog(null,cus_lname);
-//            //return cus_lname;
-//            //System.out.println(cus_lname);
-//        } catch (Exception e){
-//            //JOptionPane.showMessageDialog(null,e);
-//            System.out.println(e);
-//        }
-//        System.out.println(graph.size());
-//    }
 
     public HashMap<String, Double> queryTop25k() throws Exception {
         //create a statement object
@@ -147,7 +117,9 @@ public class bollywood_bairs {
             for (int i = 0; i < size - 1; i++) {
                 for (int j = i+1; j < size; j++) {
                     Pair<String, String> p = new Pair<>(actors.get(i), actors.get(j));
-                    pair_ratings.get(p).add((Double) mapElement.getValue());
+                    if (pair_ratings.get(p) != null) {
+                        pair_ratings.get(p).add((Double) mapElement.getValue());
+                    }
                 }
             }
         }
