@@ -89,6 +89,7 @@ public class gui {
 	Connection connection = null;
 	graph Graph = null;
 	indirectDirector indirector = null;
+	bollywood_bairs pairs = null;
 	
 	/**
 	 * Create the application.
@@ -98,6 +99,7 @@ public class gui {
 		initialize();
 		Graph = new graph();
 		indirector = new indirectDirector();
+		pairs = new bollywood_bairs();
 		
 	}
 	public static final String user = "csce315_913_3_user";
@@ -555,13 +557,47 @@ public class gui {
 			}
 		});
 		
+//		JButton getFTButton = new JButton("Get Fresh Tomato");
+//		getFTButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				if (validateTitle(FTMovie1.getText()) && validateTitle(FTMovie2.getText())) {
+//					errorMessagePlaceholder.setText("");
+//					DefaultListModel FTModel = new DefaultListModel();
+//					List<String> chain = Graph.findShortestPath(FTMovie1.getText(),FTMovie2.getText());
+//					for (String id: chain) {
+//						FTModel.addElement(id);
+//					}
+//					FTChainList.setModel(FTModel);
+//					FreshTomatoNumber.setText(Graph.getFTNumber(chain));
+//				}
+//				else {
+//					System.out.println("titles not validated");
+//					errorMessagePlaceholder.setText("Titles not validated. Please try again.");
+//				}
+//				
+//				
+//			}
+//		});
+		
 		JPanel HollywoodPairs = new JPanel();
 		Analyst.addTab("Hollywood Pairs", null, HollywoodPairs, null);
 		HollywoodPairs.setLayout(null);
 		
+		JLabel HPair = new JLabel("");
+		HPair.setBackground(Color.WHITE);
+		HPair.setBounds(735, 55, 100, 19);
+		HollywoodPairs.add(HPair);
+		
 		JButton getPairsBtn = new JButton("Get Pairs");
 		getPairsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			try {
+					String pairs_10 = pairs.doWork();
+					HPair.setText(pairs_10);
+				}
+			catch(Exception re){
+				re.printStackTrace();
+			}
 			}
 		});
 		getPairsBtn.setBounds(97, 87, 85, 21);

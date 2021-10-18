@@ -34,7 +34,7 @@ public class bollywood_bairs {
     public static void main(String[] args) {
         bollywood_bairs boly = new bollywood_bairs();
         try {
-			boly.doWork();
+			String s = boly.doWork();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class bollywood_bairs {
 
     public void queryTitleActors() {}
 
-    public void doWork() throws Exception {
+    public String doWork() throws Exception {
         // Type is <titleID, rating>
         HashMap<String, Double> title_ratings = queryTop25k();
 
@@ -140,14 +140,17 @@ public class bollywood_bairs {
 
 
         // TESTING Print out the top 20 values
-        System.out.println("Printing out the top 20 actor pairs and their ratings");
+        System.out.println("Printing out the top 10 actor pairs and their ratings");
+        String result = new String();
         int i = 0;
-        int print_num = 20;
+        int print_num = 10;
         Iterator iter = pair_avg_rat.entrySet().iterator();
         while (iter.hasNext() && i < print_num) {
             Map.Entry m = (Map.Entry) iter.next();
-            System.out.println("Act 1: " + m.getValue() + " rating: " + m.getKey());
+//            System.out.println("Actors: " + m.getValue() + " rating: " + m.getKey());
+            result += m.getValue() + " : " + m.getKey();
         }
+        return result;
 
     }
 
