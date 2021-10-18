@@ -118,12 +118,13 @@ cte2 as(
     left join principals as p on  c.titleid = p.titleid
     where c.nconst != p.nconst and  p.category = 'director'
 )
- select count( distinct director ) from cte2 
+ select count( distinct director ) from cte2;
 -- cte3 as(
 --     select p.titleid, c.nconst, p.nconst as director from cte2 as c
 --     left join principals as p on c.nconst = p.nconst
 --     where p.category = 'director'
 -- )
 -- select count(distinct director) from cte3;
+
 
 

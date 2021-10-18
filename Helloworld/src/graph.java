@@ -18,6 +18,13 @@ for (String id: chain) {
 	DLM2.addElement(id);
 }*/
 
+/*
+ * Links for code sources:
+ * https://www.geeksforgeeks.org/graph-and-its-representations/
+ * https://www.geeksforgeeks.org/shortest-path-unweighted-graph/
+ * https://stackoverflow.com/questions/43700347/find-shortest-path-between-two-locations-unweighted-using-bfs
+ */
+
 public class graph {
 	public static final String user = "csce315_913_3_user";
 	public static final String pswd = "sikewrongnumber";
