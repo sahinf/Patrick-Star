@@ -34,6 +34,12 @@ public class bollywood_bairs {
 
     public static void main(String[] args) {
         bollywood_bairs boly = new bollywood_bairs();
+        try {
+			boly.doWork();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 //    public void bulkquery() {
@@ -65,20 +71,25 @@ public class bollywood_bairs {
 //        System.out.println(graph.size());
 //    }
 
-    public HashMap<String, Float> queryTop25k() throws Exception {
+    public HashMap<String, Double> queryTop25k() throws Exception {
         //create a statement object
         ResultSet result;
         try {
             Statement stmt = connection.createStatement();
-            String sqlStatement = "SELECT titles.titleid, titles.averagerating FROM titles\n" +
-                    "ORDER BY titles.averagerating DESC\n" +
-                    "LIMIT 10;";
+//            String sqlStatement = "SELECT titles.titleid, titles.averagerating FROM titles\n" +
+//                    "ORDER BY titles.averagerating DESC\n" +
+//                    "LIMIT 10;";
+            String sqlStatement = "select titles.titleid, titles.averagerating"
+    	       		+ " from titles"
+            		+ " where titles.titleid != 'titleId' "
+    	       		+ " order by titles.averagerating desc" 
+    	       		+ " LIMIT 250000;";
             // send statement to DB
             result = stmt.executeQuery(sqlStatement);
-            HashMap<String, Float> res = new HashMap<>();
+            HashMap<String, Double> res = new HashMap<>();
             while(result.next()){
                 String titleId = result.getString("titleId");
-                Float rating = result.getFloat("averageRating");
+                Double rating = result.getDouble("averageRating");
                 res.put(titleId, rating);
             }
             return res;
@@ -116,13 +127,13 @@ public class bollywood_bairs {
 
     public void doWork() throws Exception {
         // Type is <titleID, rating>
-        HashMap<String, Float> title_ratings = queryTop25k();
+        HashMap<String, Double> title_ratings = queryTop25k();
 
         // Type is <titleID, vector<Actors>>
         HashMap<String, ArrayList<String>> title_actors = queryActors();
 
         // Type is <<Actor1, Actor2>, vector<rating>>
-        HashMap<Pair<String, String>, ArrayList<Float>> pair_ratings = new HashMap<>();
+        HashMap<Pair<String, String>, ArrayList<Double>> pair_ratings = new HashMap<>();
 
         Iterator ratingIter = title_ratings.entrySet().iterator();
 
@@ -136,18 +147,18 @@ public class bollywood_bairs {
             for (int i = 0; i < size - 1; i++) {
                 for (int j = i+1; j < size; j++) {
                     Pair<String, String> p = new Pair<>(actors.get(i), actors.get(j));
-                    pair_ratings.get(p).add((Float) mapElement.getValue());
+                    pair_ratings.get(p).add((Double) mapElement.getValue());
                 }
             }
         }
 
         // Ordered map of rating, <actor, actor> in descending order thanks to reverseOrder();
-        TreeMap<Float, Pair<String, String>> pair_avg_rat = new TreeMap<Float, Pair<String, String>>(Collections.reverseOrder());
-        for (Map.Entry<Pair<String, String>, ArrayList<Float>> m : pair_ratings.entrySet()){
-            Float sum = 0.0f;
-            // m.getValue() = ArrayList<Float>
-            ArrayList<Float> vec_rat = m.getValue();
-            for (Float f : vec_rat) {
+        TreeMap<Double, Pair<String, String>> pair_avg_rat = new TreeMap<Double, Pair<String, String>>(Collections.reverseOrder());
+        for (Map.Entry<Pair<String, String>, ArrayList<Double>> m : pair_ratings.entrySet()){
+            Double sum = 0.0;
+            // m.getValue() = ArrayList<Double>
+            ArrayList<Double> vec_rat = m.getValue();
+            for (Double f : vec_rat) {
                 sum += f;
             }
             // Divide total ratings by size to get AVERAGE
