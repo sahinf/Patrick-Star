@@ -151,11 +151,11 @@ public class bollywood_bairs {
 
     public String doWork() throws Exception {
         // Type is <titleID, rating>
-        HashMap<String, Double> title_ratings = queryTop25k();
-
-        // Type is <titleID, vector<Actors>>
-        HashMap<String, ArrayList<String>> title_actors = queryActors();
-        
+//        HashMap<String, Double> title_ratings = queryTop25k();
+//
+//        // Type is <titleID, vector<Actors>>
+//        HashMap<String, ArrayList<String>> title_actors = queryActors();
+//        
         // Test whether title_actors is populated
 //        for(Map.Entry<String, ArrayList<String>> m : title_actors.entrySet()) {
 //        	// .getValue and .getKey
@@ -163,7 +163,7 @@ public class bollywood_bairs {
 //        }
 
         // Type is <<Actor1, Actor2>, vector<rating>>
-        HashMap<Pair<String, String>, ArrayList<Double>> pair_ratings = new HashMap<>();
+//        HashMap<Pair<String, String>, ArrayList<Double>> pair_ratings = new HashMap<>();
 
 //        Iterator ratingIter = title_ratings.entrySet().iterator();
 //        while(ratingIter.hasNext()){
@@ -183,50 +183,52 @@ public class bollywood_bairs {
 //                }
 //            }
 //        }
-        for(Map.Entry<String, Double> m : title_ratings.entrySet()) {
-        	// .getValue and .getKey
-            ArrayList<String> actors = new ArrayList();
-            if (title_actors.get(m.getKey()) != null){
-	            actors = title_actors.get(m.getKey());
-	            int size = actors.size();
-	            for (int i = 0; i < size - 1; i++) {
-	                for (int j = i+1; j < size; j++) {
-	                    Pair<String, String> p = new Pair<>(actors.get(i), actors.get(j));
-	                    if (pair_ratings.get(p) != null) {
-	                        pair_ratings.get(p).add((Double) m.getValue());
-	                    }
-	                }
-	            }
-            }
-        }
+//        for(Map.Entry<String, Double> m : title_ratings.entrySet()) {
+//        	// .getValue and .getKey
+//            ArrayList<String> actors = new ArrayList();
+//            if (title_actors.get(m.getKey()) != null){
+//	            actors = title_actors.get(m.getKey());
+//	            int size = actors.size();
+//	            for (int i = 0; i < size - 1; i++) {
+//	                for (int j = i+1; j < size; j++) {
+//	                    Pair<String, String> p = new Pair<>(actors.get(i), actors.get(j));
+//	                    if (pair_ratings.get(p) != null) {
+//	                        pair_ratings.get(p).add((Double) m.getValue());
+//	                    }
+//	                }
+//	            }
+//            }
+//        }
 
         // Ordered map of rating, <actor, actor> in descending order thanks to reverseOrder();
-        TreeMap<Double, Pair<String, String>> pair_avg_rat = new TreeMap<Double, Pair<String, String>>(Collections.reverseOrder());
-        for (Map.Entry<Pair<String, String>, ArrayList<Double>> m : pair_ratings.entrySet()){
-            Double sum = 0.0;
-            // m.getValue() = ArrayList<Double>
-            ArrayList<Double> vec_rat = m.getValue();
-            for (Double f : vec_rat) {
-                sum += f;
-            }
-            // Divide total ratings by size to get AVERAGE
-            sum = sum / vec_rat.size();
-            pair_avg_rat.put(sum, m.getKey()); // actor, actor, rating_average
-        }
-
-
-        // TESTING Print out the top 20 values
-        System.out.println("Printing out the top 10 actor pairs and their ratings");
-        String result = new String();
-        int i = 0;
-        int print_num = 10;
-        Iterator iter = pair_avg_rat.entrySet().iterator();
-        while (iter.hasNext() && i < print_num) {
-            Map.Entry m = (Map.Entry) iter.next();
-            System.out.println("Actors: " + m.getValue() + " rating: " + m.getKey());
-            result += m.getValue() + " : " + m.getKey();
-        }
+//        TreeMap<Double, Pair<String, String>> pair_avg_rat = new TreeMap<Double, Pair<String, String>>(Collections.reverseOrder());
+//        for (Map.Entry<Pair<String, String>, ArrayList<Double>> m : pair_ratings.entrySet()){
+//            Double sum = 0.0;
+//            // m.getValue() = ArrayList<Double>
+//            ArrayList<Double> vec_rat = m.getValue();
+//            for (Double f : vec_rat) {
+//                sum += f;
+//            }
+//            // Divide total ratings by size to get AVERAGE
+//            sum = sum / vec_rat.size();
+//            pair_avg_rat.put(sum, m.getKey()); // actor, actor, rating_average
+//        }
+//
+//
+//        // TESTING Print out the top 20 values
+//        System.out.println("Printing out the top 10 actor pairs and their ratings");
+//        String result = new String();
+//        int i = 0;
+//        int print_num = 10;
+//        Iterator iter = pair_avg_rat.entrySet().iterator();
+//        while (iter.hasNext() && i < print_num) {
+//            Map.Entry m = (Map.Entry) iter.next();
+//            System.out.println("Actors: " + m.getValue() + " rating: " + m.getKey());
+//            result += m.getValue() + " : " + m.getKey();
+//        }
+    	String result = new String();
         result = queryGood();
+        System.out.println(result);
         return result;
 
     }
