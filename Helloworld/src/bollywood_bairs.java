@@ -101,9 +101,6 @@ public class bollywood_bairs {
         // Type is <<Actor1, Actor2>, vector<rating>>
         HashMap<Pair<String, String>, ArrayList<Float>> pair_ratings = new HashMap<>();
 
-        // Testing a different method of <<Actor1, Actor2>, rating>
-        ArrayList<Pair<Pair<String, String> , Float>> = new ArrayList<>();
-
         Iterator ratingIter = title_ratings.entrySet().iterator();
 
         while(ratingIter.hasNext()){
@@ -121,8 +118,19 @@ public class bollywood_bairs {
             }
         }
 
-        // Now the pair_ratings map is filled with ALL pairs of actors and a vector of their ratings.
-        // We need a List < <Actor1, Actor2>, Float >
+        // Ordered map of rating, <actor, actor> in descending order thanks to reverseOrder();
+        TreeMap<Float, Pair<String, String>> pair_avg_rat = new TreeMap<Float, Pair<String, String>>(Collections.reverseOrder());
+        for (Map.Entry<Pair<String, String>, ArrayList<Float>> m : pair_ratings.entrySet()){
+            Float sum = 0.0f;
+            // m.getValue() = ArrayList<Float>
+            ArrayList<Float> vec_rat = m.getValue();
+            for (Float f : vec_rat) {
+                sum += f;
+            }
+            // Divide total ratings by size to get AVERAGE
+            sum = sum / vec_rat.size();
+            pair_avg_rat.put(sum, m.getKey()); // actor, actor, rating_average
+        }
 
     }
 
