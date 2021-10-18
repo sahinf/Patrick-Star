@@ -23,6 +23,7 @@ public class bollywood_bairs {
             System.err.println(e.getClass().getName()+": "+e.getMessage());
             return null;
         }//end try catch
+        
 
     }
     Connection connection = null;
@@ -69,6 +70,58 @@ public class bollywood_bairs {
             throw new Exception("Error in accessing data in queryTop25k");
         }
     }
+    public String queryGood() throws Exception {
+    	ResultSet re;
+    	try {
+    		String s = new String();
+    		Statement stmt = connection.createStatement();
+    		String sqlStatement = "with\n"
+    				+ "truncated as (\n"
+    				+ "    select * from principals\n"
+    				+ "    where category = 'actor' or category = 'actress'\n"
+    				+ "    limit 100000\n"
+    				+ "),\n"
+    				+ "allpairs as (\n"
+    				+ "    select c.nconst as name1, d.nconst as name2, cast(t.averagerating as decimal) as averagerating,t.titleid\n"
+    				+ "    from truncated as c\n"
+    				+ "    join truncated as d on c.titleid = d.titleid\n"
+    				+ "    join titles as t on t.titleid = c.titleid\n"
+    				+ "    where c.nconst != d.nconst\n"
+    				+ "),\n"
+    				+ "rankedpairs as (\n"
+    				+ "    select least(name1,name2) as person1, greatest(name1,name2) as person2, avg(cast(averagerating as float)) as average, count(cast(averagerating as float)) as total\n"
+    				+ "    from allpairs\n"
+    				+ "    group by least(name1,name2),greatest(name1,name2)\n"
+    				+ "    order by average desc\n"
+    				+ "    \n"
+    				+ ")\n"
+    				+ "-- rankedpairs as (\n"
+    				+ "--     select name1, name2, avg(cast(averagerating as float)) as average\n"
+    				+ "--     from allpairs\n"
+    				+ "--     group by name1, name2\n"
+    				+ "--     order by average desc\n"
+    				+ "-- )\n"
+    				+ "-- rankedpairs as (\n"
+    				+ "--     select name1, name2,averagerating, titleid\n"
+    				+ "--     from allpairs\n"
+    				+ "-- )\n"
+    				+ "--  select sum(cast(averagerating as float)) from rankedpairs where greatest(name1,name2) = 'nm0005658' and least(name1,name2) = 'nm0000428';\n"
+    				+ "select * from rankedpairs;";
+            re = stmt.executeQuery(sqlStatement);
+    		while(re.next()) {
+    			String act1 = re.getString("name1");
+    			String act2 = re.getString("name2");
+                Double rating = re.getDouble("average");
+                s += act1 + ", " + act2 + ": " + rating;
+
+    		}
+    		return s;
+    	}
+    	catch(Exception e) {
+            throw new Exception("Error in accessing data in queryTop25k");
+
+    	}
+    }
 
     public HashMap<String, ArrayList<String>> queryActors() throws Exception {
         //create a statement object
@@ -94,6 +147,7 @@ public class bollywood_bairs {
     }
 
     public void queryTitleActors() {}
+    
 
     public String doWork() throws Exception {
         // Type is <titleID, rating>
@@ -169,10 +223,10 @@ public class bollywood_bairs {
         Iterator iter = pair_avg_rat.entrySet().iterator();
         while (iter.hasNext() && i < print_num) {
             Map.Entry m = (Map.Entry) iter.next();
-//            System.out.println("Actors: " + m.getValue() + " rating: " + m.getKey());
+            System.out.println("Actors: " + m.getValue() + " rating: " + m.getKey());
             result += m.getValue() + " : " + m.getKey();
         }
-        System.out.println(result);
+        result = queryGood();
         return result;
 
     }
