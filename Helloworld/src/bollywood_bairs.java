@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 import java.lang.Object;
 
@@ -101,8 +98,11 @@ public class bollywood_bairs {
         // Type is <titleID, vector<Actors>>
         HashMap<String, ArrayList<String>> title_actors = queryActors();
 
-        // Type is < <Actor_1, Actor_2>, vector<rating>>
+        // Type is <<Actor1, Actor2>, vector<rating>>
         HashMap<Pair<String, String>, ArrayList<Float>> pair_ratings = new HashMap<>();
+
+        // Testing a different method of <<Actor1, Actor2>, rating>
+        ArrayList<Pair<Pair<String, String> , Float>> = new ArrayList<>();
 
         Iterator ratingIter = title_ratings.entrySet().iterator();
 
@@ -120,6 +120,10 @@ public class bollywood_bairs {
                 }
             }
         }
+
+        // Now the pair_ratings map is filled with ALL pairs of actors and a vector of their ratings.
+        // We need a List < <Actor1, Actor2>, Float >
+
     }
 
 }
