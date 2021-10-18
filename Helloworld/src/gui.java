@@ -36,18 +36,13 @@ import javax.swing.JRadioButton;
 
 public class gui {
 	
-	public String textField_1_string;
-	public String textField_2_string;
-	public String textField_3_string;
-	public String textField_5_string;
-	public String textField_6_string;
+	public String startDateViewer;
+	public String endDateViewer;
+	public String startDateAna;
+	public String endDateAna;
 	private JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_5;
-	private JTextField textField_6;
 
 	/**
 	 * Launch the application.
@@ -145,6 +140,8 @@ public class gui {
 	public String getWatchHistory(String startDate, String endDate,String user) {
 		String cus_lname = "<html>";
 		 
+		System.out.println(startDate);
+		System.out.println(endDate);
 	     try{
 	     //create a statement object
 	       Statement stmt = connection.createStatement();
@@ -177,111 +174,6 @@ public class gui {
 	}
 	
 	
-//	public String getPersonalRec(String userFavGenres) throws Exception {
-//		String cus_lname = "<html>";
-//		ResultSet result;
-//		 
-//	     try{
-//	     //create a statement object
-//	       Statement stmt = connection.createStatement();
-//	       //Collecting 4+ ratings from the user
-//	       String sqlStatement = "select titles.originaltitle, titles.genres, titles.averagerating, titles.numvotes"
-//	       		+ " from titles"
-//	       		+ " where titles.genres != '' and titles.originaltitle != 'originalTitle' "
-//	       		+ " order by titles.averagerating desc;"; // change
-//	       //send statement to DBMS
-//	       result = stmt.executeQuery(sqlStatement);
-//	       
-//	       // titles.averagerating > '7.0' and titles.numvotes > '500' and 
-//	       //Generating recommended title list, only looking for titles that have a credible rating.
-//	       //Definition of credible rating according to our group: Rating that is 7.0+ AND has more than 50 votes.
-//	       String placeholder = "";
-//	       Integer aCount = 0;
-//	       while (result.next()) {
-//	    	   if ((result.getDouble("averagerating") < 7.0) || (result.getInt("numvotes") < 50)) {
-//	    		   continue;
-//	    	   }
-//	    	   placeholder = result.getString("genres");
-//	    	   if (placeholder.contentEquals(userFavGenres)) {
-//	    		   cus_lname += result.getString("originaltitle") + "<br>";
-//	    		   ++aCount;
-//	    		   if (aCount == 20) {
-//	    			   cus_lname += "</html>";
-//	    			   return cus_lname;
-//	    			  }
-//	    		   continue;
-//	    		   }
-//	       }
-//	       cus_lname += "</html>";
-//	       return cus_lname;
-//	   } catch (Exception e){
-//	     //JOptionPane.showMessageDialog(null,e);
-//	     throw new Exception("Error in accessing data");
-//	   }
-//		
-//		
-//	}
-//	
-//	
-//	
-//	public String curateViewersChoice(String user) throws Exception {
-//		String cus_lname = "<html>";
-//		Map<String,List<String>> userGenres = new HashMap<>();
-//		ResultSet result;
-//		 
-//	     try{
-//	     //create a statement object
-//	       Statement stmt = connection.createStatement();
-//	       //Collecting 4+ ratings from the user
-//	       String sqlStatement = "select ratings4plus.titleid,titles.originaltitle, titles.genres, ratings4plus.rating"
-//	       		+ " from ratings4plus"
-//	       		+ " left join titles on ratings4plus.titleid = titles.titleid"
-//	       		+ " where ratings4plus.customerid = '"+user+"' "
-//	       		+ " group by ratings4plus.titleid,titles.originaltitle,titles.genres, ratings4plus.rating"
-//	       		+ " order by ratings4plus.rating desc;"; // change
-//	       //send statement to DBMS
-//	       result = stmt.executeQuery(sqlStatement);
-//	       
-//	       //Populating hashmap of each title and their genres
-//	       while (result.next()) {
-//	         userGenres.put(result.getString("titleid"), Arrays.asList(result.getString("genres")));
-//	       }
-//	       
-//	       //Creating a hashmap which collects the frequency of genres in each category.
-//		   Map<String, Integer> genreCount = new HashMap<>();
-//		   for (Map.Entry<String, List<String> > set : userGenres.entrySet()) {
-//			   List<String> placeholder = set.getValue();
-//			   for (int i = 0; i < placeholder.size(); ++i) {
-//				   if (!genreCount.containsKey(placeholder.get(i))) {
-//					   genreCount.put(placeholder.get(i), 1);
-//				   } else {
-//					   genreCount.merge(placeholder.get(i),1,Integer::sum);
-//				   }
-//			   }
-//		   }
-//		   
-//		   System.out.println(genreCount);
-//		   //Find most occuring genre
-//		   Integer mostOccuring = 0;
-//		   String mostGenre = null;
-//		   for (Map.Entry<String,Integer> set : genreCount.entrySet()) {
-//			   if ((set.getValue() > mostOccuring) && (set.getKey().contains(","))) {
-//				   mostOccuring = set.getValue();
-//				   mostGenre = set.getKey();
-//			   }
-//		   }
-//		   
-//		   System.out.println(mostGenre);
-//		   System.out.println(mostOccuring);
-//		   return mostGenre;
-//	       
-//	   } catch (Exception e){
-//	     //JOptionPane.showMessageDialog(null,e);
-//	     throw new Exception("Error in accessing data");
-//	   }
-//		
-//		
-//	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -324,70 +216,6 @@ public class gui {
 		JList list = new JList();
 		scrollPane.setViewportView(list);
 		
-		JLabel lblNewLabel_3 = new JLabel("Start Date");
-		lblNewLabel_3.setBounds(228, 160, 89, 16);
-		panel_1.add(lblNewLabel_3);
-		
-		textField_2 = new JTextField();
-		textField_2.setBounds(197, 188, 130, 26);
-		panel_1.add(textField_2);
-		textField_2.setColumns(10);
-		
-		JLabel lblNewLabel_4 = new JLabel("End Date");
-		lblNewLabel_4.setBounds(228, 226, 61, 16);
-		panel_1.add(lblNewLabel_4);
-		
-		textField_3 = new JTextField();
-		textField_3.setBounds(197, 254, 130, 26);
-		panel_1.add(textField_3);
-		textField_3.setColumns(10);
-		
-		JButton btnNewButton_2 = new JButton("Submit");
-		btnNewButton_2.setBounds(200, 290, 117, 29);
-		panel_1.add(btnNewButton_2);
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textField_1_string = textField_1.getText();
-				System.out.println(textField_1_string);
-				textField_2_string = textField_2.getText();
-				System.out.println(textField_2_string);
-				textField_3_string = textField_3.getText();
-				System.out.println(textField_3_string);
-				
-				if (textField_2_string.equals("")) {
-					textField_2_string = "1980-01-01";
-				}
-				if (textField_3_string.equals("")) {
-					textField_3_string = "2022-01-01";
-				}
-				
-//				String UserList = getWatchHistory(textField_2_string,textField_3_string,textField_1_string);
-				DefaultListModel DLM = new DefaultListModel();
-				try {
-					viewersChoice ViewersChoice = new viewersChoice();
-					String userRecGenres = ViewersChoice.curateViewersChoice(textField_1_string);
-					System.out.println("I'm working");
-					String allTitles = ViewersChoice.getPersonalRec(userRecGenres);
-					DLM.addElement(allTitles);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				list.setModel(DLM);
-				
-//				DefaultListModel DLM = new DefaultListModel();
-//				DLM.addElement(UserRec);
-//				//DLM2.addElement(textField_5_string);
-//				//DLM2.addElement(textField_6_string);
-//				
-//				list.setModel(DLM);
-				
-				
-				
-			}
-		});
-		
 		JButton btnNewButton_1 = new JButton("Watch History");
 		btnNewButton_1.setBounds(394, 66, 175, 46);
 		panel_1.add(btnNewButton_1);
@@ -418,48 +246,61 @@ public class gui {
 		panel_1.add(rdbtnNewRadioButton);
 		rdbtnNewRadioButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField_2_string = "2005-11-30";
-				textField_3_string = "2005-12-31";
+				startDateViewer = "2005-11-30";
+				endDateViewer = "2005-12-31";
 			}
 		});
 		
 		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Last 3 Months");
 		rdbtnNewRadioButton_1.setBounds(631, 177, 141, 23);
 		panel_1.add(rdbtnNewRadioButton_1);
-		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+		rdbtnNewRadioButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField_2_string = "2005-09-30";
-				textField_3_string = "2005-12-31";
+				startDateViewer = "2005-09-30";
+				endDateViewer = "2005-12-31";
+				System.out.println(startDateViewer);
 			}
 		});
 		
 		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Last 6 Months");
 		rdbtnNewRadioButton_2.setBounds(631, 210, 141, 23);
 		panel_1.add(rdbtnNewRadioButton_2);
-		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+		rdbtnNewRadioButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField_2_string = "2005-06-30";
-				textField_3_string = "2005-12-31";
+				startDateViewer = "2005-06-30";
+				endDateViewer = "2005-12-31";
 			}
 		});
 		
 		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("Last Year");
 		rdbtnNewRadioButton_3.setBounds(631, 243, 141, 23);
 		panel_1.add(rdbtnNewRadioButton_3);
-		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+		rdbtnNewRadioButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField_2_string = "2004-12-31";
-				textField_3_string = "2005-12-31";
+				startDateViewer = "2004-12-31";
+				endDateViewer = "2005-12-31";
 			}
 		});
 		
 		JRadioButton rdbtnNewRadioButton_4 = new JRadioButton("All Time");
 		rdbtnNewRadioButton_4.setBounds(631, 278, 141, 23);
 		panel_1.add(rdbtnNewRadioButton_4);
-		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+		rdbtnNewRadioButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField_6_string = "2005-11-30";
-				textField_6_string = "2005-12-31";
+				startDateViewer = "1999-12-31";
+				endDateViewer = "2005-12-31";
+			}
+		});
+		
+		JButton btnNewButton_2 = new JButton("Submit");
+		btnNewButton_2.setBounds(641, 313, 117, 29);
+		panel_1.add(btnNewButton_2);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel viewerSubmit = new DefaultListModel();
+				String userWatchHistory = getWatchHistory(startDateViewer,endDateViewer, textField_1.getText());
+				viewerSubmit.addElement(userWatchHistory);
+				list.setModel(viewerSubmit);
 			}
 		});
 		
@@ -471,26 +312,8 @@ public class gui {
 		list_1.setBounds(351, 127, 265, 329);
 		panel_1_1.add(list_1);
 		
-		JLabel lblNewLabel_3_1 = new JLabel("Start Date");
-		lblNewLabel_3_1.setBounds(231, 163, 89, 16);
-		panel_1_1.add(lblNewLabel_3_1);
-		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(190, 191, 130, 26);
-		panel_1_1.add(textField_5);
-		
-		JLabel lblNewLabel_4_1 = new JLabel("End Date");
-		lblNewLabel_4_1.setBounds(231, 241, 61, 16);
-		panel_1_1.add(lblNewLabel_4_1);
-		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(190, 269, 130, 26);
-		panel_1_1.add(textField_6);
-		
 		JButton btnNewButton_2_1 = new JButton("Submit");
-		btnNewButton_2_1.setBounds(203, 319, 117, 29);
+		btnNewButton_2_1.setBounds(628, 314, 117, 29);
 		panel_1_1.add(btnNewButton_2_1);
 		btnNewButton_2_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -501,16 +324,8 @@ public class gui {
 //				DLM.addElement("Italian Job");
 //				list.setModel(DLM);
 //				System.out.println(textField_3_string);
-				textField_5_string = textField_5.getText();
-				if (textField_5_string.equals("")) {
-					textField_5_string = "1980-01-01";
-				}
-				textField_6_string = textField_6.getText();
-				if (textField_6_string.equals("")) {
-					textField_6_string = "2022-01-01";
-				}
 				
-				String AllUsersList = getTopContent(textField_5_string,textField_6_string,"");
+				String AllUsersList = getTopContent(startDateAna,endDateAna,"");
 				DefaultListModel DLM2 = new DefaultListModel();
 				DLM2.addElement(AllUsersList);
 				//DLM2.addElement(textField_5_string);
@@ -525,11 +340,55 @@ public class gui {
 		btnNewButton_1_1.setActionCommand("");
 		btnNewButton_1_1.setBounds(370, 68, 246, 46);
 		panel_1_1.add(btnNewButton_1_1);
-		btnNewButton_2_1.addActionListener(new ActionListener() {
+		
+		JRadioButton rdbtnNewRadioButton_5 = new JRadioButton("Last Month");
+		rdbtnNewRadioButton_5.setBounds(628, 137, 141, 23);
+		panel_1_1.add(rdbtnNewRadioButton_5);
+		rdbtnNewRadioButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField_5_string = textField_5.getText();
-				textField_6_string = textField_6.getText();
-				
+				startDateAna = "2005-11-30";
+				endDateAna = "2005-12-31";
+			}
+		});
+		
+		JRadioButton rdbtnNewRadioButton_6 = new JRadioButton("Last 3 Months");
+		rdbtnNewRadioButton_6.setBounds(628, 172, 141, 23);
+		panel_1_1.add(rdbtnNewRadioButton_6);
+		rdbtnNewRadioButton_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				startDateAna = "2005-09-30";
+				endDateAna = "2005-12-31";
+			}
+		});
+		
+		
+		JRadioButton rdbtnNewRadioButton_7 = new JRadioButton("Last 6 Months");
+		rdbtnNewRadioButton_7.setBounds(628, 207, 141, 23);
+		panel_1_1.add(rdbtnNewRadioButton_7);
+		rdbtnNewRadioButton_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				startDateAna = "2005-06-30";
+				endDateAna = "2005-12-31";
+			}
+		});
+		
+		JRadioButton rdbtnNewRadioButton_8 = new JRadioButton("Last Year");
+		rdbtnNewRadioButton_8.setBounds(628, 242, 141, 23);
+		panel_1_1.add(rdbtnNewRadioButton_8);
+		rdbtnNewRadioButton_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				startDateAna = "2004-12-31";
+				endDateAna = "2005-12-31";
+			}
+		});
+		
+		JRadioButton rdbtnNewRadioButton_9 = new JRadioButton("All Time");
+		rdbtnNewRadioButton_9.setBounds(628, 277, 141, 23);
+		panel_1_1.add(rdbtnNewRadioButton_9);
+		rdbtnNewRadioButton_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				startDateAna = "1999-12-31";
+				endDateAna = "2005-12-31";
 			}
 		});
 		
