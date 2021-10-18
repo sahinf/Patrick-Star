@@ -25,8 +25,8 @@ public class indirectDirector {
 	Connection connection = null;
 	public indirectDirector() {
 		connection = dbConnector();
-		String otherDirector = getIndirectDirector("nm0000003");
-		System.out.println(otherDirector);
+		//String otherDirector = getIndirectDirector("nm0000003");
+		//System.out.println(otherDirector);
 		
 		
 	}

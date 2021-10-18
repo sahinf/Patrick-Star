@@ -38,6 +38,7 @@ import javax.swing.DropMode;
 import javax.swing.JMenu;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ButtonGroup;
 import javax.swing.JSeparator;
 import javax.swing.JDesktopPane;
 import javax.swing.JLayeredPane;
@@ -59,7 +60,7 @@ public class gui {
 	private JTextField analystIDlogin;
 	private JTextField IndirectActor;
 	private JTextField FTMovie1;
-	private JTextField textField_4;
+	private JTextField FTMovie2;
 
 	/**
 	 * @wbp.nonvisual location=111,794
@@ -86,12 +87,18 @@ public class gui {
 	
 	
 	Connection connection = null;
+	graph Graph = null;
+	indirectDirector indirector = null;
+	
 	/**
 	 * Create the application.
 	 */
 	public gui() {
 		connection = dbConnector();
 		initialize();
+		Graph = new graph();
+		indirector = new indirectDirector();
+		
 	}
 	public static final String user = "csce315_913_3_user";
 	public static final String pswd = "sikewrongnumber";
@@ -192,6 +199,84 @@ public class gui {
 		
 	}
 	
+	public Boolean validateTitle(String title) {
+		 try{
+		     //create a statement object
+		       Statement stmt = connection.createStatement();
+		       //create an SQL statement
+		       String sqlStatement = "select ratings.titleid"
+		       		+ " from ratings"
+		       		+ " where ratings.titleid = '"+ title +"' limit 1;";
+		       //send statement to DBMS
+		       ResultSet result = stmt.executeQuery(sqlStatement);
+		       String aTitle = "";
+		       while (result.next()) {		       
+		         aTitle += result.getString("titleid"); // change		         
+		       }
+		       if (aTitle == "") {
+		    	   return false;
+		       }
+		       else {
+		    	   return true;
+		       }		      
+		   } catch (Exception e){
+		     return false;
+		   }
+		
+	}
+	
+	public Boolean validateActor(String name) {
+		 try{
+		     //create a statement object
+		       Statement stmt = connection.createStatement();
+		       //create an SQL statement
+		       String sqlStatement = "select principals.nconst"
+		       		+ " from principals"
+		       		+ " where nconst = '"+ name +"' and (category = 'actor' or category = 'actress') limit 1;";
+		       //send statement to DBMS
+		       ResultSet result = stmt.executeQuery(sqlStatement);
+		       String aName = "";
+		       while (result.next()) {
+		         aName += result.getString("nconst");
+		       }
+		       if (aName == "") {
+		    	   return false;
+		       }
+		       else {
+		    	   return true;
+		       }
+		   } catch (Exception e){
+			   return false;
+		   }
+		
+	}
+	
+	public Boolean validateCustomer(String customerid) {
+		 try{
+		     //create a statement object
+		       Statement stmt = connection.createStatement();
+		       //create an SQL statement
+		       String sqlStatement = "select ratings.customerid"
+		       		+ " from ratings"
+		       		+ " where ratings.customerid = '"+ customerid +"' limit 1;";
+		       //send statement to DBMS
+		       ResultSet result = stmt.executeQuery(sqlStatement);
+		       String aCustomer = "";
+		       while (result.next()) {		       
+		         aCustomer += result.getString("customerid"); // change		         
+		       }
+		       if (aCustomer == "") {
+		    	   return false;
+		       }
+		       else {
+		    	   return true;
+		       }		      
+		   } catch (Exception e){
+		     return false;
+		   }
+		
+	}
+	
 	
 	
 	
@@ -230,24 +315,44 @@ public class gui {
 		Login.add(lblNewLabel);
 		
 		 
-		JButton btnViewerLogin = new JButton("Viewer");
-		btnViewerLogin.setBounds(117, 214, 85, 21);
+		JButton btnViewerLogin = new JButton("Go to Viewer Portal!");
+		btnViewerLogin.setBounds(117, 196, 155, 21);
 		Login.add(btnViewerLogin);
 		
 		
-		JButton analystLogInButton = new JButton("Analyst");
-		analystLogInButton.setBounds(898, 214, 85, 21);
+		JButton analystLogInButton = new JButton("Go to Analyst Portal!");
+		analystLogInButton.setBounds(510, 196, 163, 21);
 		Login.add(analystLogInButton);
 		
 		userIDlogin = new JTextField();
-		userIDlogin.setBounds(117, 154, 96, 19);
+		userIDlogin.setBounds(117, 154, 155, 31);
 		Login.add(userIDlogin);
 		userIDlogin.setColumns(10);
 		
 		analystIDlogin = new JTextField();
-		analystIDlogin.setBounds(898, 154, 96, 19);
+		analystIDlogin.setBounds(510, 154, 163, 31);
 		Login.add(analystIDlogin);
 		analystIDlogin.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Customer ID:");
+		lblNewLabel_2.setBounds(117, 129, 95, 14);
+		Login.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_5 = new JLabel("Enter Name:");
+		lblNewLabel_5.setBounds(510, 129, 89, 14);
+		Login.add(lblNewLabel_5);
+		
+		JLabel customerIdErrorLabel = new JLabel("");
+		customerIdErrorLabel.setForeground(Color.RED);
+		customerIdErrorLabel.setBounds(117, 228, 226, 21);
+		Login.add(customerIdErrorLabel);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBackground(Color.PINK);
+		separator.setOrientation(SwingConstants.VERTICAL);
+		separator.setForeground(Color.BLACK);
+		separator.setBounds(390, 11, 2, 362);
+		Login.add(separator);
 		
 		JTabbedPane Viewer = new JTabbedPane(JTabbedPane.TOP);
 		layeredPane.add(Viewer, "name_108384137906000");
@@ -305,6 +410,13 @@ public class gui {
 				endDateViewer = "2005-12-31";
 			}
 		});
+		
+		ButtonGroup WatchHistButtons = new ButtonGroup();
+		WatchHistButtons.add(ThisMonthButton);
+		WatchHistButtons.add(last3MonthsButton);
+		WatchHistButtons.add(last6MonthsButton);
+		WatchHistButtons.add(lastYearButton);
+		WatchHistButtons.add(allTimeButton);
 		
 		JButton btnNewButton = new JButton("Submit");
 		btnNewButton.setBounds(1031, 282, 117, 29);
@@ -422,6 +534,13 @@ public class gui {
 			}
 		});
 		
+		ButtonGroup Top10Buttons = new ButtonGroup();
+		Top10Buttons.add(lastMonthTop10But);
+		Top10Buttons.add(last3MonthsTop10But);
+		Top10Buttons.add(last6MonthsTop10But);
+		Top10Buttons.add(lastYearTop10But);
+		Top10Buttons.add(allTimeTop10But);
+		
 		JButton Top10Submit = new JButton("Submit");
 		Top10Submit.setBounds(963, 300, 114, 29);
 		Top10.add(Top10Submit);
@@ -461,48 +580,84 @@ public class gui {
 		Analyst.addTab("Fresh Tomato", null, FreshTomato, null);
 		FreshTomato.setLayout(null);
 		
-		JLabel lblNewLabel_2 = new JLabel("Movie One");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_2.setBounds(107, 88, 94, 19);
-		FreshTomato.add(lblNewLabel_2);
+		JLabel Movie1Label = new JLabel("Movie One");
+		Movie1Label.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		Movie1Label.setBounds(107, 88, 94, 19);
+		FreshTomato.add(Movie1Label);
 		
 		FTMovie1 = new JTextField();
-		FTMovie1.setBounds(105, 117, 96, 19);
+		FTMovie1.setBounds(105, 117, 192, 34);
 		FreshTomato.add(FTMovie1);
 		FTMovie1.setColumns(10);
 		
-		JLabel FTMovie2 = new JLabel("Movie Two");
-		FTMovie2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		FTMovie2.setBounds(107, 195, 94, 19);
-		FreshTomato.add(FTMovie2);
+		JLabel Movie2Label = new JLabel("Movie Two");
+		Movie2Label.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		Movie2Label.setBounds(107, 195, 94, 19);
+		FreshTomato.add(Movie2Label);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(105, 224, 96, 19);
-		FreshTomato.add(textField_4);
+		FTMovie2 = new JTextField();
+		FTMovie2.setForeground(Color.BLACK);
+		FTMovie2.setColumns(10);
+		FTMovie2.setBounds(105, 224, 192, 40);
+		FreshTomato.add(FTMovie2);
 		
 		JLabel lblNewLabel_3 = new JLabel("The CHAIN");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_3.setBounds(567, 53, 88, 19);
+		lblNewLabel_3.setBounds(479, 53, 88, 19);
 		FreshTomato.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel_4 = new JLabel("Fresh Tomato #");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_4.setBounds(739, 53, 120, 13);
+		lblNewLabel_4.setBounds(630, 56, 120, 13);
 		FreshTomato.add(lblNewLabel_4);
 		
 		
-		JLabel lblNewLabel_5 = new JLabel("FreshTomato Number");
-		lblNewLabel_5.setBackground(Color.WHITE);
-		lblNewLabel_5.setBounds(853, 53, 100, 19);
-		FreshTomato.add(lblNewLabel_5);
+		JLabel FreshTomatoNumber = new JLabel("");
+		FreshTomatoNumber.setBackground(Color.WHITE);
+		FreshTomatoNumber.setBounds(735, 55, 100, 19);
+		FreshTomato.add(FreshTomatoNumber);
+		
+		JList FTChainList = new JList();
+		FTChainList.setBounds(479, 88, 319, 322);
+		FreshTomato.add(FTChainList);
+		
+		JLabel errorMessagePlaceholder = new JLabel("");
+		errorMessagePlaceholder.setForeground(Color.RED);
+		errorMessagePlaceholder.setBounds(107, 347, 190, 49);
+		FreshTomato.add(errorMessagePlaceholder);
+		
+		JButton getFTButton = new JButton("Get Fresh Tomato");
+		getFTButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (validateTitle(FTMovie1.getText()) && validateTitle(FTMovie2.getText())) {
+					errorMessagePlaceholder.setText("");
+					DefaultListModel FTModel = new DefaultListModel();
+					List<String> chain = Graph.findShortestPath(FTMovie1.getText(),FTMovie2.getText());
+					for (String id: chain) {
+						FTModel.addElement(id);
+					}
+					FTChainList.setModel(FTModel);
+					FreshTomatoNumber.setText(Graph.getFTNumber(chain));
+				}
+				else {
+					System.out.println("titles not validated");
+					errorMessagePlaceholder.setText("Titles not validated. Please try again.");
+				}
+				
+				
+			}
+		});
+		getFTButton.setBounds(105, 305, 192, 23);
+		FreshTomato.add(getFTButton);
+		
+		
 		
 		JPanel IndirectDirector = new JPanel();
 		Analyst.addTab("Indirect Director", null, IndirectDirector, null);
 		IndirectDirector.setLayout(null);
 		
 		IndirectActor = new JTextField();
-		IndirectActor.setBounds(106, 133, 96, 19);
+		IndirectActor.setBounds(106, 133, 132, 34);
 		IndirectDirector.add(IndirectActor);
 		IndirectActor.setColumns(10);
 		
@@ -511,12 +666,39 @@ public class gui {
 		IndirectDirector.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Director");
-		lblNewLabel_1_1.setBounds(106, 208, 56, 13);
+		lblNewLabel_1_1.setBounds(427, 110, 56, 13);
 		IndirectDirector.add(lblNewLabel_1_1);
 		
-		TextArea IndirectDirectorList = new TextArea();
-		IndirectDirectorList.setBounds(106, 227, 167, 66);
-		IndirectDirector.add(IndirectDirectorList);
+		JList indirectList = new JList();
+		indirectList.setBounds(427, 133, 132, 34);
+		IndirectDirector.add(indirectList);
+		
+		JLabel indirectorErrorLabel = new JLabel("");
+		indirectorErrorLabel.setForeground(Color.RED);
+		indirectorErrorLabel.setBounds(103, 178, 148, 28);
+		IndirectDirector.add(indirectorErrorLabel);
+		
+		JButton getIndirector = new JButton("Get Indirect Director");
+		getIndirector.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (validateActor(IndirectActor.getText())) {
+					indirectorErrorLabel.setText("");
+					DefaultListModel IAModel = new DefaultListModel();
+					String inDirId = indirector.getIndirectDirector(IndirectActor.getText());					
+					IAModel.addElement(inDirId);					
+					indirectList.setModel(IAModel);
+				}
+				else {
+					System.out.println("Actor not validated");
+					indirectorErrorLabel.setText("Actor not Valid. Try Again.");
+				}
+				
+			}
+		});
+		getIndirector.setBounds(270, 139, 133, 23);
+		IndirectDirector.add(getIndirector);
+		
+		
 		
 		JButton changeUserBtn = new JButton("Change User");
 		changeUserBtn.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -539,11 +721,18 @@ public class gui {
 			}
 		});
 		btnViewerLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				layeredPane.removeAll();
-				layeredPane.add(Viewer);
-				layeredPane.repaint();
-				layeredPane.revalidate();
+			public void actionPerformed(ActionEvent e) {				
+				if (validateCustomer(userIDlogin.getText())) {
+					customerIdErrorLabel.setText("");
+					layeredPane.removeAll();
+					layeredPane.add(Viewer);
+					layeredPane.repaint();
+					layeredPane.revalidate();
+				}
+				else {
+					System.out.println("customer not validated");
+					customerIdErrorLabel.setText("Customer not validated. Please try again.");
+				}
 			}
 		});
 		

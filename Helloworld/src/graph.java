@@ -225,6 +225,15 @@ public class graph {
 
 
     	}
+    
+    public String getFTNumber(List<String> chain) {
+    	int FTNo = 0;
+    	if (chain.size() >= 3) {
+    		FTNo = chain.size()-2;
+    	}
+    	String number = Integer.toString(FTNo);
+    	return number;
+    }
 	
 
 }
