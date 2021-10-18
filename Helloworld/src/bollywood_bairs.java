@@ -103,10 +103,10 @@ public class bollywood_bairs {
         HashMap<String, ArrayList<String>> title_actors = queryActors();
         
         // Test whether title_actors is populated
-        for(Map.Entry<String, ArrayList<String>> m : title_actors.entrySet()) {
-        	// .getValue and .getKey
-            System.out.println(m.getKey() + m.getValue().get(0));
-        }
+//        for(Map.Entry<String, ArrayList<String>> m : title_actors.entrySet()) {
+//        	// .getValue and .getKey
+//            System.out.println(m.getKey() + m.getValue().get(0));
+//        }
 
         // Type is <<Actor1, Actor2>, vector<rating>>
         HashMap<Pair<String, String>, ArrayList<Double>> pair_ratings = new HashMap<>();
@@ -172,6 +172,7 @@ public class bollywood_bairs {
 //            System.out.println("Actors: " + m.getValue() + " rating: " + m.getKey());
             result += m.getValue() + " : " + m.getKey();
         }
+        System.out.println(result);
         return result;
 
     }
