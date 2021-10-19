@@ -90,6 +90,7 @@ public class gui {
 	graph Graph = null;
 	indirectDirector indirector = null;
 	bollywood_bairs pairs = null;
+	HollywoodPairs somePairs = null;
 	
 	/**
 	 * Create the application.
@@ -100,6 +101,7 @@ public class gui {
 		Graph = new graph();
 		indirector = new indirectDirector();
 		pairs = new bollywood_bairs();
+		somePairs = new HollywoodPairs();
 		
 	}
 	public static final String user = "csce315_913_3_user";
@@ -588,12 +590,27 @@ public class gui {
 		HPair.setBounds(735, 55, 100, 19);
 		HollywoodPairs.add(HPair);
 		
+		JList HWPairsList = new JList();
+		HWPairsList.setBounds(415, 128, 334, 406);
+		HollywoodPairs.add(HWPairsList);
+		
 		JButton getPairsBtn = new JButton("Get Pairs");
 		getPairsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			try {
-					String pairs_10 = pairs.doWork();
-					HPair.setText(pairs_10);
+					//String pairs_10 = pairs.doWork();
+					//HPair.setText(pairs_10);
+				     DefaultListModel HWModel = new DefaultListModel();
+					List<String> pairsList = somePairs.getPairs();
+					for (String pairs: pairsList) {
+						HWModel.addElement(pairs);
+					}
+					HWPairsList.setModel(HWModel);
+					//FreshTomatoNumber.setText(Graph.getFTNumber(chain));
+					
+					
+				
+					
 				}
 			catch(Exception re){
 				re.printStackTrace();
@@ -603,14 +620,12 @@ public class gui {
 		getPairsBtn.setBounds(97, 87, 85, 21);
 		HollywoodPairs.add(getPairsBtn);
 		
-		TextArea HllyWdPairsList = new TextArea();
-		HllyWdPairsList.setBounds(415, 141, 440, 324);
-		HollywoodPairs.add(HllyWdPairsList);
-		
 		JLabel lblNewLabel_6 = new JLabel("Top 10 Hollywood Pairs ");
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_6.setBounds(415, 91, 237, 13);
 		HollywoodPairs.add(lblNewLabel_6);
+		
+		
 		
 		JPanel FreshTomato = new JPanel();
 		Analyst.addTab("Fresh Tomato", null, FreshTomato, null);

@@ -12,10 +12,11 @@ allpairs as (
     where c.nconst != d.nconst
 ),
 rankedpairs as (
-    select least(name1,name2) as person1, greatest(name1,name2) as person2, avg(cast(averagerating as float)) as average, count(cast(averagerating as float)) as total
+    select least(name1,name2) as person1, greatest(name1,name2) as person2, avg(cast(averagerating as float)) as average, count(cast(averagerating as float)) as total, 
+    sum(cast(averagerating as float)) as weighted
     from allpairs
     group by least(name1,name2),greatest(name1,name2)
-    order by average desc
+    order by weighted desc
     
 )
 -- rankedpairs as (
@@ -29,4 +30,4 @@ rankedpairs as (
 --     from allpairs
 -- )
 --  select sum(cast(averagerating as float)) from rankedpairs where greatest(name1,name2) = 'nm0005658' and least(name1,name2) = 'nm0000428';
-select * from rankedpairs;
+select * from rankedpairs limit 10;
